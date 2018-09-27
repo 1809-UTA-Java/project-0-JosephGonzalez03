@@ -35,11 +35,18 @@ class Account implements Depositable, Withdrawalable {
         return true;
     }
 
-    boolean getAccountInfo() {
-        System.out.println("****** ACCOUNT INFORMATION ******");
-        System.out.println("Account Name: " + name);
-        System.out.println("Account Number: " + number);
-        System.out.println("Account Balance: " + balance + "\n\n");
+    double getBalance() {
+        return balance;
+    }
+
+    String getInfo() {
+        String info = new String();
+
+        info = "****** ACCOUNT INFORMATION ******\n"
+                + "Account Name: " + name + "\n"
+                + "Account Number: " + number + "\n\n";
+        
+        return info;
     }
 
 
