@@ -2,69 +2,69 @@ package com.revature;
 
 import java.util.Scanner;
 
-public class Menu {
+public class Menus {
 
-    void toConsole(String message) {
+    static void toConsole(String message) {
         System.out.println(message);
     }
-
-    int startMenu(Scanner scan) {
-        toConsole("Welcome to your Joseph Banking\n");
-        toConsole("(1) Would you like to register for a user account or \n" 
-                   + "(2) login to an existing one?");
-        toConsole("Please enter action number: ");
-        
-        return scan.nextInt();
+    
+    static void pageHeader(String pageName) {
+    	  toConsole("\n\n\n=====================================");
+          toConsole(pageName);
+          toConsole("=====================================");
     }
 
-    String[] registerMenu(Scanner scan) {
+    static String startMenu(Scanner scan) {
+        toConsole("Welcome to your Joseph Banking\n");
+        toConsole("1. REGISTER for a user account or \n" +
+                  "2. LOGIN to an existing one?");
+        toConsole("Choose action: ");
+        
+        return scan.next();
+    }
+
+    static String[] registerMenu(Scanner scan) {
         String[] response = new String[2];
         String confirmedPassword = new String();
 
-        toConsole("-------------------------------------");
-        toConsole("----- USER ACCOUNT REGISTRATION -----");
-        toConsole("-------------------------------------\n\n\n");
-
+        pageHeader("USER ACCOUNT REGISTRATION");
 
         toConsole("Please enter user account information.");
         toConsole("Username: ");
-        response[0] = scan.nextLine();
+        response[0] = scan.next();
         
         // ask for password until password & confirmed password match
         do {
             toConsole("Password: ");
-            response[1] = scan.nextLine();
+            response[1] = scan.next();
 
             toConsole("Confirm password: ");
-            confirmedPassword = scan.nextLine();
+            confirmedPassword = scan.next();
         } while (!response[1].equals(confirmedPassword));
 
         return response;
     }
 
-    String[] loginMenu(Scanner scan) {
+    static String[] loginMenu(Scanner scan) {
         String[] response = new String[2];
 
-        toConsole("-----------------------------------");
-        toConsole("----------- LOGIN PAGE ------------");
-        toConsole("-----------------------------------\n\n\n");
-
+        pageHeader("LOGIN PAGE");
+        
         toConsole("Please username and password.");
         toConsole("Username: ");
-        response[0] = scan.nextLine();
+        response[0] = scan.next();
         toConsole("Password: ");
-        response[1] = scan.nextLine();
+        response[1] = scan.next();
 
         return response;
     }
 
-    void accountMenu(Scanner scan) {
-        toConsole("-----------------------------------");
-        toConsole("----- ACCOUNT MANAGEMENT PAGE -----");
-        toConsole("-----------------------------------\n\n\n");
-
+    static void accountMenu(Scanner scan) {
+    	pageHeader("ACCOUNT MANAGEMENT PAGE");
+    	
         toConsole("What would you like to do?");
-        toConsole("(1) Create a new account");
+        toConsole("1. CREATE a new account");
+        toConsole("2. ACCESS...");
         
     }
 }

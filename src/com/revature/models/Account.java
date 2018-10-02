@@ -1,45 +1,29 @@
 package com.revature.models;
 
-class Account implements Depositable, Withdrawalable {
-    String name = new String();
-    int number = 00000000;
-    double balance = 0.00;
 
-    public Account(String name, int number, double balance) {
+public class Account {
+    private String name = new String();
+    private String number = new String();
+    private double balance = 0.00;
+    
+    public Account(String name, String number) {
         this.name = name;
         this.number = number;
-        this.balance = balance;
     }
 
-    boolean depositMoney(double amount) {
-        if (amount < 0) {
-            System.out.println("AMOUNT CANNOT BE NEGATIVE!");
-            return false;
-        }
-        
-        balance += amount;
-        return true;
-    }
-
-    boolean withdrawMoney(double amount) {
-        if (amount < 0) {
-            System.out.println("AMOUNT CANNOT BE NEGATIVE!");
-            return false;
-        } else 
-        if (amount > balance) {
-            System.out.println("AMOUNT CANNOT EXCEED ACCOUNT BALANCE!");
-            return false;
-        }
-        
-        balance -= amount;
-        return true;
-    }
-
-    double getBalance() {
+    public double getBalance() {
         return balance;
     }
+    
+    public void setBalance(double balance) {
+    	this.balance = balance;
+    }
+    
+    public String getAccountNumber() {
+    	return number;
+    }
 
-    String getInfo() {
+    public String getInfo() {
         String info = new String();
 
         info = "****** ACCOUNT INFORMATION ******\n"
@@ -48,6 +32,4 @@ class Account implements Depositable, Withdrawalable {
         
         return info;
     }
-
-
 }

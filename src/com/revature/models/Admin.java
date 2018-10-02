@@ -1,43 +1,14 @@
 package com.revature.models;
 
-public class Customer extends User implements Transactionable {
-	// personal info
-    private int phone; 
-    private String email = new String();
+public class Admin extends Empolyee implements Transactionable {
 
-    public Customer(String username, String password, String firstName, String lastName) {
+	public Admin(String username, String password, String firstName, String lastName) {
 		super(username, password, firstName, lastName);
 	}
 
-    void setFirstName(String name) {
-        this.firstName = name;
-    }
-
-    void setLastName(String name) {
-        this.lastName = name;
-    }
-
-    void setPhone(int phoneNumber) {
-        this.phone = phoneNumber;
-    }
-
-    void setEmail(String email) {
-        this.email = email;
-    }
-
-    String getInfo() {
-        String info = new String();
-
-        info = "****** CUSTOMER INFORMATION ******\n"
-                + "Username: " + username + "\n"
-                + "Password: " + password + "\n"
-                + "First Name: " + firstName + "\n"
-                + "Last Name: " + lastName + "\n"
-                + "Phone Number: " + phone + "\n"
-                + "Email: " + email + "\n\n";
-
-        return info;
-    }
+	public boolean cancelAccount(Customer customer, Account account) {
+		return false;
+	}
 
 	@Override
 	public boolean depositMoney(Account account, double amount) {
