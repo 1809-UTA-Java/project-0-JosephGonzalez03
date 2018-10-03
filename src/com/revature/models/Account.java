@@ -6,11 +6,15 @@ public class Account {
     private String number = new String();
     private double balance = 0.00;
     
-    public Account(String name, String number) {
+    public Account(String name) {
         this.name = name;
-        this.number = number;
+        this.number = "random number";
     }
 
+    public String getName() {
+    	return name;
+    }
+    
     public double getBalance() {
         return balance;
     }

@@ -2,26 +2,24 @@ package com.revature.models;
 
 public class Customer extends User implements Transactionable {
 	// personal info
-    private int phone; 
+    private String phone; 
     private String email = new String();
 
+    public Customer(String username, String password, String firstName, String lastName, String phone, String email) { 
+    	super(username, password, firstName, lastName);
+    	this.phone = phone;
+    	this.email = email;
+    }
+    
     public Customer(String username, String password, String firstName, String lastName) {
 		super(username, password, firstName, lastName);
 	}
 
-    void setFirstName(String name) {
-        this.firstName = name;
-    }
-
-    void setLastName(String name) {
-        this.lastName = name;
-    }
-
-    void setPhone(int phoneNumber) {
+    public void setPhone(String phoneNumber) {
         this.phone = phoneNumber;
     }
 
-    void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
