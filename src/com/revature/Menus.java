@@ -2,6 +2,7 @@ package com.revature;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,9 +22,9 @@ public class Menus {
     }
 
     static String startMenu(Scanner scan) {
-        toConsole("Welcome to your Joseph Banking\n");
+        toConsole("Welcome to your Personal Banking Application!\n");
         toConsole("1. REGISTER for a user account");
-        toConsole("2. LOGIN to an existing one");
+        toConsole("2. LOGIN fromTo an existing one");
         toConsole("3. EXIT banking app");
         toConsole("Choose action: ");
         
@@ -59,11 +60,11 @@ public class Menus {
     	toConsole("E-MAIL: ");
     	resps.add(scan.nextLine());
     	
+    	toConsole("\n\n\n\n\n\n");
         return new Customer(resps.get(0),resps.get(1),resps.get(2),resps.get(3),resps.get(4),resps.get(5));
     }
 
-    static boolean loginMenu(HashSet<User> users) {
-    	Scanner scan = new Scanner(System.in);
+    static boolean loginMenu(Scanner scan, HashSet<User> users) {
     	List<String> responses = new ArrayList<>();
 
     	do {
@@ -75,7 +76,6 @@ public class Menus {
     		responses.add(scan.nextLine());;    		
     	} while(!loginVerification(users, responses));
 
-        scan.close();
         return true;
     }
 
@@ -91,8 +91,7 @@ public class Menus {
         
     }
     
-    static Account createAccountMenu(Customer c) {
-    	Scanner scan = new Scanner(System.in);
+    static Account createAccountMenu(Scanner scan, Customer c) {
     	String resp = new String();
     	Database db = new Database();
     	
@@ -116,19 +115,121 @@ public class Menus {
     	
     	toConsole("\nNew account" + resp + "created!");
     	
-    	scan.close();
     	return new Account(resp);
     }
     
-    static void accountsMenu(Customer c) {
+    static boolean accountsMenu(Scanner scan, Customer c) {
     	Database db = new Database();
-    	List<Account> accounts = db.getAccounts(c);
-    	Account curr;
     	
-    	for (int i=0; i<accounts.size(); i++) {
-    		curr = accounts.get(i);
-    		toConsole(i+1 + ". " + curr.getName() + "......." + curr.getBalance());
+    	// save user inputs for validation
+    	String key = "";
+		double amount = 0;
+		String name1 = "";
+		String name2 = "";
+		boolean validInput = false;
+    	
+    	List<Account> accounts = db.getAccounts(c);
+    	Account currA = null, destA = null;
+    	
+    	pageHeader("ACCOUNT LEDGER");
+    	
+    	if (accounts == null) {
+    		System.out.println("You currently have no accoounts. Return to previous" +
+    							"\npage to create some.");
+    		toConsole("\nOPTIONS: ");
+    		toConsole("BACK to previous page");
+	    	toConsole("Choose action: ");
+			key = scan.next().toUpperCase();
+			
+			switch (toAction(key)) {
+			case BACK:
+				return false;
+			default:
+				break;
+			}
+    		
+    	} else {
+    		// display customer's accounts
+    		for (int i=0; i<accounts.size(); i++) {
+        		currA = accounts.get(i);
+        		toConsole(i+1 + ". " + currA.getName() + "......." + currA.getBalance());
+        	}
+    		
+    		// allow customer to perform transactions
+        	do {
+    			toConsole("\nOPTIONS: ");
+    	    	toConsole("1. DEPOSIT [amount] [dest. account name]");
+    	    	toConsole("2. WITHDRAW [amount] [source account name]");
+    	    	toConsole("3. TRANSFER [amount] [source account name]"
+    	    								 + "[dest. account name]");
+    	    	toConsole("BACK to previous page");
+    	    	toConsole("Choose action: ");
+    			key = scan.next().toUpperCase();
+    			
+    			try {
+    				// break down user input to variables
+    				switch(toAction(key)) {
+    				case DEPOSIT:
+    				case WITHDRAW:
+    					amount = scan.nextDouble();
+    					name1 = scan.next();
+    					name2 = "";
+    					break;
+    				case TRANSFER:
+    					amount = scan.nextDouble();
+    					name1 = scan.next();
+    					name2 = scan.next();
+    					break;
+    				case BACK:
+    					return false;
+    				default:
+    					System.out.println("INVALID KEYWORD ENTERED!");
+    				}
+
+    				// check if account names exist
+    				for(Account a : accounts) {
+    					if (name1.contentEquals(a.getName())) {
+    						currA = a;
+    						validInput = true;
+    						break;
+    					}
+    				}
+    				
+    				if (!name2.isEmpty()) {
+    					for(Account a : accounts) {
+    						if (name2.contentEquals(a.getName())) {
+    							destA = a;
+    							validInput = true;
+    							break;
+    						} 
+    					}
+    				}
+    			} catch (InputMismatchException e) {
+    				e.getMessage();
+    				validInput = false;
+    				System.out.println("INVALID INPUT IN COMMAND!\n");
+    			} 	
+    		} while(!validInput);
+    		
+        	// format amount to money format (i.e. 1.00)
+        	String amountStr = String.format("%.2f", amount);
+        	amount = Double.parseDouble(amountStr);
+        	
+        	switch (key) {
+    		case "DEPOSIT":
+    			c.depositMoney(currA, amount);
+    			break;
+    		case "WITHDRAW":
+    			c.withdrawMoney(currA, amount);
+    			break;
+    		case "TRANSFER":
+    			c.transferMoney(currA, destA, amount);
+    		default:
+    			break;
+    		}
     	}
+
+    	return true;
     }
     
     static boolean loginVerification(HashSet<User> users, List<String> resps) {
@@ -141,10 +242,22 @@ public class Menus {
 				} else {
 					System.out.println("INCORRECT PASSWORD!");
 				}
-			} else {
-				System.out.println("USERNAME NOT FOUND!");
 			}
 		}
+    	
+    	System.out.println("USERNAME NOT FOUND!");
     	return false;
+    }
+
+    static Action toAction(String string) {
+    	Action action = Action.NOTHING;
+ 
+    	try {
+    		action = Action.valueOf(string.toUpperCase());
+    	} catch (IllegalArgumentException e) {
+    		System.out.println("INVALID KEYWORD ENTERED!");
+    	}
+    	
+    	return action;
     }
 }

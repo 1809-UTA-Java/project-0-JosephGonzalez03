@@ -8,7 +8,7 @@ public class Account {
     
     public Account(String name) {
         this.name = name;
-        this.number = "random number";
+        this.number = Long.toString(System.currentTimeMillis());
     }
 
     public String getName() {

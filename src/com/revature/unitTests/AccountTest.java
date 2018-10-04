@@ -11,7 +11,7 @@ public class AccountTest {
 		String name = "Joseph";
 		String number = "1111111";
 		
-		Account a = new Account(name, number);
+		Account a = new Account(name);
 
 		String expectedString = "****** ACCOUNT INFORMATION ******\n"
                 + "Account Name: " + name + "\n"

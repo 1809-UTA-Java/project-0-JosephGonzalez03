@@ -3,11 +3,10 @@ package com.revature;
 import java.util.HashSet;
 import java.util.Scanner;
 
-import com.revature.database.Database;
 import com.revature.models.*;
 
 enum Action {
-	REGISTER, LOGIN, CREATE, ACCESS, BACK, LOGOUT, EXIT;
+	REGISTER, LOGIN, CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER,BACK, LOGOUT, EXIT, NOTHING;
 }
 
 public class BankingApp {
@@ -16,11 +15,10 @@ public class BankingApp {
     	Scanner s = new Scanner(System.in);
 
     	Customer c = null;
-    	Account a = null;
     	HashSet<User> users = new HashSet<>();
-    	Database db = new Database();
     	
     	boolean isLoggedIn = false;
+    	boolean accessingAccounts = false;
     	
     	while(true) {
     		if (!isLoggedIn) {
@@ -38,13 +36,13 @@ public class BankingApp {
     				 users.add(c);
     				 break;
     			case LOGIN:
-    				isLoggedIn = Menus.loginMenu(users);
+    				isLoggedIn = Menus.loginMenu(s, users);
     				break;
     			default:
-    				System.out.println("INVALID KEYWORD ENTERED!");
     				break;
     			}	
-    		} else {
+    		} else 
+    		if (!accessingAccounts){
     			key = Menus.userOptionsMenu(s);
         		
         		// user bank account pages
@@ -53,26 +51,30 @@ public class BankingApp {
     				
     				break;
     			case ACCESS:
-    				
-    				do {
-    					Menus.accountsMenu(c);
-    				}
-    				
+    				accessingAccounts = true;
     				break;
     			case LOGOUT:
     				c = null;
     				isLoggedIn = false;
     				break;
     			default:
-    				System.out.println("INVALID KEYWORD ENTERED!");
     				break;
     			}
+    		} else {
+    			accessingAccounts = Menus.accountsMenu(s, c);
     		}
-    		
-    	} 
+    	}
 	}
     
     static Action toAction(String string) {
-    	return Action.valueOf(string.toUpperCase());
+    	Action action = Action.NOTHING;
+ 
+    	try {
+    		action = Action.valueOf(string.toUpperCase());
+    	} catch (IllegalArgumentException e) {
+    		System.out.println("INVALID KEYWORD ENTERED!");
+    	}
+    	
+    	return action;
     }
 }

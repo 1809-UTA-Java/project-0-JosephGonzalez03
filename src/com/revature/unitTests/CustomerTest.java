@@ -7,7 +7,7 @@ import com.revature.models.*;
 public class CustomerTest {
 	@Test
 	public void despositTest() {
-		Account a = new Account("Checking", "111");
+		Account a = new Account("Checking");
 		Customer c = new Customer("JosephG", "password", "Joseph", "G");
 
 		double amount = 10;
@@ -28,7 +28,7 @@ public class CustomerTest {
 	
 	@Test
 	public void withdrawalTest() {
-		Account a = new Account("Checking", "111");
+		Account a = new Account("Checking");
 		Customer c = new Customer("JosephG", "password", "Joseph", "G");
 		
 		double amount = 11;
@@ -68,8 +68,8 @@ public class CustomerTest {
 	
 	@Test
 	public void transferTest() {
-		Account a1 = new Account("Checking", "111");
-		Account a2 = new Account("Savings", "112");
+		Account a1 = new Account("Checking");
+		Account a2 = new Account("Savings");
 		Customer c = new Customer("JosephG", "password", "Joseph", "G");
 		
 		double amount = 11;
