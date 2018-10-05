@@ -22,7 +22,7 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS";
+			String sql = "SELECT * FROM ACCOUNTS WHERE isApprove = false";
 			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
@@ -49,6 +49,12 @@ public class AccountDAOImpl implements AccountDAO {
 		return accounts;
 	}
 
+	/******************************************************************/
+	@Override
+	public List<Account> getUnapprovedAccounts() {
+	
+	}
+	
 	/******************************************************************/
 	
 	@Override

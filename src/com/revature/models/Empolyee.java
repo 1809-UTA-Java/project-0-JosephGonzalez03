@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import com.revature.dao.*;
+
 public class Empolyee extends User implements Requestable {
 
 	public Empolyee(String username, String password, String firstName, String lastName) {
