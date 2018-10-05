@@ -63,7 +63,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			String sql = "SELECT * FROM CUSTOMERS WHERE username in"
 					+ "SELECT username FROM ACCOUNTS WHERE number LIKE ?";
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, account.getAccountNumber());
+			ps.setLong(1, account.getNumber());
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -168,9 +168,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 	
 	@Override
 	public boolean addCustomer(Customer customer) {
-		Customer c = null;
-		List<Customer> customers = new ArrayList<>();
-		
 		try {
 			conn = DAOUtil.getConnection();
 			String sql = "INSERT INTO CUSTOMERS VALUES(?,?,?,?,?,?)";
