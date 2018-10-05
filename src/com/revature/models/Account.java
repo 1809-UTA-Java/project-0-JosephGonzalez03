@@ -3,35 +3,31 @@ package com.revature.models;
 
 public class Account {
 	private long number = 0;
-	private String username = new String();
     private String name = new String();
     private double balance = 0.00;
     private boolean isApproved;
     
     // used for pulling from database
-    public Account(long number, String username, String name, double balance, boolean isApproved) {
+    public Account(long number, String name, double balance, boolean isApproved) {
 		super();
 		this.number = number;
-		this.username = username;
 		this.name = name;
 		this.balance = balance;
 		this.isApproved = isApproved;
 	}
     
-    // used with account number is know
-    public Account(long number, String username, String name, double balance) {
+    // used to initially create unapproved account
+    public Account(long number, String name, double balance) {
 		super();
 		this.number = number;
-		this.username = username;
 		this.name = name;
 		this.balance = balance;
 		this.isApproved = false;
 	}
    
     // used when initially creating account
-	public Account(String username, String name) {
+	public Account(String name) {
 		super();
-		this.username = username;
 		this.name = name;
 		this.balance = 0.00;
 		this.isApproved = false;
@@ -47,14 +43,6 @@ public class Account {
 
 	public void setNumber(long number) {
 		this.number = number;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public String getName() {

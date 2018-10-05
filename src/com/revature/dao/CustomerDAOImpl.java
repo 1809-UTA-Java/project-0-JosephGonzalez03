@@ -60,8 +60,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM CUSTOMERS WHERE username in"
-					+ "SELECT username FROM ACCOUNTS WHERE number LIKE ?";
+			String sql = "SELECT * FROM CUSTOMERS c INNER JOIN CUSTOMER_ACCOUNTS cs ON c.username = ca.username WHERE accNumber = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setLong(1, account.getNumber());
 			ResultSet rs = ps.executeQuery();

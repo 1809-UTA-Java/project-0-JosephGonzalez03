@@ -93,7 +93,7 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS WHERE username LIKE ?";
+			String sql = "SELECT * FROM ACCOUNTS a INNER JOIN CUSTOMER_ACCOUNTS ca ON a.accNumber = ca.accNumber WHERE ca.username = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
@@ -124,8 +124,8 @@ public class AccountDAOImpl implements AccountDAO {
 	/******************************************************************/
 	
 	@Override
-	public List<Account> getAccountsByNumber(Long accountNumber) {
-		List<Account> accounts = null;
+	public Account getAccountByNumber(Long accountNumber) {
+		Account a = new Account();
 
 		try {
 			conn = DAOUtil.getConnection();
@@ -135,15 +135,11 @@ public class AccountDAOImpl implements AccountDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				Account a = new Account();
-				
 				a.setNumber(rs.getLong("accNumber"));
 				a.setUsername(rs.getString("username"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
-				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
-				
-				accounts.add(a);
+			a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
 			}
 			
 			
@@ -155,7 +151,7 @@ public class AccountDAOImpl implements AccountDAO {
 			e.getMessage();
 		}
 		
-		return accounts;
+		return a;
 	}
 
 	/******************************************************************/
