@@ -9,72 +9,57 @@ enum Action {
 	REGISTER, LOGIN, CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER,BACK, LOGOUT, EXIT, NOTHING;
 }
 
+enum User {
+	ADMIN, EMPLOYEE, CUSTOMER;
+}
+
 public class BankingApp {
     public static void main(String[] args) {
     	String key = new String();
     	Scanner s = new Scanner(System.in);
 
-    	Customer c = null;
-    	HashSet<User> users = new HashSet<>();
+    	User user = null;
     	
-    	boolean isLoggedIn = false;
-    	boolean accessingAccounts = false;
+    	boolean terminate = false;
+    	boolean isLoggedIn = false;	
     	
-    	while(true) {
+    	while(!terminate) {
+    		// login proceedure 
     		if (!isLoggedIn) {
     			key = Menus.startMenu(s);
-
-    			// exit application
-        		if (toAction(key) == Action.EXIT) {
-        			break;
-        		}
     			
         		// welcome pages
     			switch (toAction(key)) {
     			case REGISTER:
-    				c = Menus.registerMenu(s);
-    				 users.add(c);
+    				user = Menus.registerMenu(s);
+    				 users.add(user);
     				 break;
     			case LOGIN:
     				isLoggedIn = Menus.loginMenu(s, users);
     				break;
+    			case EXIT: 
+    			    terminate = true;
     			default:
     				break;
     			}	
-    		} else 
-    		if (!accessingAccounts){
-    			key = Menus.userOptionsMenu(s);
-        		
-        		// user bank account pages
-    			switch (toAction(key)) {
-    			case CREATE:
-    				
-    				break;
-    			case ACCESS:
-    				accessingAccounts = true;
-    				break;
-    			case LOGOUT:
-    				c = null;
-    				isLoggedIn = false;
-    				break;
-    			default:
-    				break;
-    			}
     		} else {
-    			accessingAccounts = Menus.accountsMenu(s, c);
+    		    switch(////) {
+    		    case ADMIN: 
+    		    
+    		        break;
+    		     case EMPLOYEE: 
+    		    
+    		        break;
+				 case CUSTOMER: 
+    		    
+    		        break;
+				default:
+				    break;
+    		    }
     		}
+    		
+    		
+    		/////
     	}
 	}
-    
-    static Action toAction(String string) {
-    	Action action = Action.NOTHING;
- 
-    	try {
-    		action = Action.valueOf(string.toUpperCase());
-    	} catch (IllegalArgumentException e) {
-    		System.out.println("INVALID KEYWORD ENTERED!");
-    	}
-    	
-    	return action;
-    }
 }

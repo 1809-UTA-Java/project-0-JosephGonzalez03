@@ -64,7 +64,7 @@ public class Menus {
         return new Customer(resps.get(0),resps.get(1),resps.get(2),resps.get(3),resps.get(4),resps.get(5));
     }
 
-    static boolean loginMenu(Scanner scan, HashSet<User> users) {
+    static boolean loginMenu(Scanner scan) {
     	List<String> responses = new ArrayList<>();
 
     	do {
@@ -74,7 +74,7 @@ public class Menus {
     		responses.add(scan.nextLine());
     		toConsole("Password: ");
     		responses.add(scan.nextLine());;    		
-    	} while(!loginVerification(users, responses));
+    	} while(!loginVerification(responses));
 
         return true;
     }
