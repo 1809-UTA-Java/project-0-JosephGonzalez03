@@ -1,4 +1,4 @@
-package com.revature.models;
+package com.revature.duo;
 
 public interface Requestable {
 	boolean approveAccount(Account account);
