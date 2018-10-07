@@ -10,6 +10,14 @@ public class CustomerDAO implements Transcationable {
 		return aDAO.addAccount();
     }
     
+    public boolean isCustomer(User user) {
+        DAOUtil dao = new DAOUtil();
+        CustomerDAO cDAO = dao.getCustomerDAO();
+        
+        List<Customer> customers = cDAO.getAllCustomers();
+        return customers.contains(user);
+    }
+    
     @Override
 	public boolean depositMoney(Account account, double amount) {
 		DAOUtil dao = new DAOUtil();

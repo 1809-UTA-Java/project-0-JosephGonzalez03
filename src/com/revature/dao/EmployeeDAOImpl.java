@@ -6,8 +6,8 @@ import com.revature.models.Employee;
 
 public interface EmployeeDAO {
     public List<User> getAllUsers() {
-		Employee e = null;
-		List<Employee> employees = new ArrayList<>();
+		User u = null;
+		List<User> users = new ArrayList<>();
 		
 		try {
 			conn = DAOUtil.getConnection();
@@ -23,6 +23,40 @@ public interface EmployeeDAO {
 				
 				u = new User(username, pwrd, first, last);
 				users.add(u);
+			}
+			
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.getMessage();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+		
+		return users;
+    }
+    
+    /******************************************************************/
+    
+    public List<Employee> getAllEmployees() {
+		Employee e = null;
+		List<Employee> employees = new ArrayList<>();
+		
+		try {
+			conn = DAOUtil.getConnection();
+			String sql = "SELECT *	FROM EMPLOYEES";
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				String username = rs.getString("username");
+				String pwrd = rs.getString("pwrd");
+				String first = rs.getString("firstName");
+				String last = rs.getString("lastName");
+				String isAdmin = Boolean.parseBoolean(rs.getString("isAdmin"));
+				
+				e = new Employee(username, pwrd, first, last, isAdmin);
+				employeess.add(e);
 			}
 			
 			rs.close();

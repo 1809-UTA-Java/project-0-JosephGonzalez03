@@ -7,7 +7,7 @@ import com.revature.models.Employee;
 
 public interface EmployeeDAO {
     public List<User> getAllUsers();
-    
+    public List<Employee> getAllEmployees();
     public boolean grantAdminPriviledge(Employee employee);
     public boolean revokeAdminPriviledge(Employee employee);
 }

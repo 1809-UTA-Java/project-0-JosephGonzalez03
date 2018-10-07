@@ -4,6 +4,14 @@ import com.revature.dao.DAOUtil;
 
 public class EmployeeDUO implements Requestable {
     
+    public boolean isEmployee(User user) {
+        DAOUtil dao = new DAOUtil();
+        EmployeeDAO eDAO = dao.getEmployeeDAO();
+        
+        List<Employee> employees = eDAO.getAllEmployees();
+        return employees.contains(user);
+    }
+    
     @Override
 	public boolean approveAccount(Account account) {
 	    DAOUtil dao = new DAOUtil();

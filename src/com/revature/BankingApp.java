@@ -19,6 +19,9 @@ public class BankingApp {
     	String username = "";
     	Scanner s = new Scanner(System.in);
 
+    	DUOUtil duo =	new DUOUtil();
+    	EmployeeDUO eDUO = duo.getEmployeeDUO();
+    	CustomerDUO cDUO = duo.getCustomerDUO();
     	User user = null;
     	
     	boolean terminate = false;
@@ -37,6 +40,8 @@ public class BankingApp {
     				 break;
     			case LOGIN:
 				username = Menus.loginMenu(s);
+				
+				
 				isLoggedIn = true
     				break;
     			case EXIT: 

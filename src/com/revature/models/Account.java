@@ -68,14 +68,9 @@ public class Account {
 	public void setApproved(boolean isApproved) {
 		this.isApproved = isApproved;
 	}
-
-	public String getInfo() {
-        String info = new String();
-
-        info = "****** ACCOUNT INFORMATION ******\n"
-                + "Account Name: " + name + "\n"
-                + "Account Number: " + number + "\n\n";
-        
-        return info;
-    }
+    
+    @Override
+     public boolean equals(Object obj) {
+        return (this.number.equals(((Account) obj).number);
+	}
 }

@@ -2,15 +2,15 @@ package com.revature.models;
 
 import com.revature.dao.*;
 
-public class Empolyee extends User {
+public class Employee extends User {
 	private boolean isAdmin;
 
-	public Empolyee(String username, String password, String firstName, String lastName, boolean isAdmin) {
+	public Employee(String username, String password, String firstName, String lastName, boolean isAdmin) {
 		super(username, password, firstName, lastName);
 		this.isAdmin = isAdmin;
 	}
 	
-	public Empolyee(String username, String password, String firstName, String lastName) {
+	public Employee(String username, String password, String firstName, String lastName) {
 		super(username, password, firstName, lastName);
 		this.isAdmin = false;
 	}
