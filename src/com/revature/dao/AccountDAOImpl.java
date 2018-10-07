@@ -22,7 +22,7 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS WHERE isApprove = false";
+			String sql = "SELECT * FROM ACCOUNTS";
 			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
@@ -52,7 +52,35 @@ public class AccountDAOImpl implements AccountDAO {
 	/******************************************************************/
 	@Override
 	public List<Account> getUnapprovedAccounts() {
-	
+	List<Account> accounts = new ArrayList<>();
+		
+		try {
+			conn = DAOUtil.getConnection();
+			String sql = "SELECT * FROM ACCOUNTS WHERE isApprove = false";
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Account a = new Account();
+				
+				a.setNumber(rs.getLong("accNumber"));
+				a.setUsername(rs.getString("username"));
+				a.setName(rs.getString("accName"));
+				a.setBalance(rs.getDouble("balance"));
+				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
+				
+				accounts.add(a);
+			}
+			
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.getMessage();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+		
+		return accounts;
 	}
 
 	/******************************************************************/
@@ -63,7 +91,7 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS a INNER JOIN CUSTOMER_ACCOUNTS ca ON a.accNumber = ca.accNumber WHERE ca.username = ?";
+			String sql = "SELECT * FROM ACCOUNTS AS a INNER JOIN CUSTOMER_ACCOUNTS AS ca ON a.accNumber = ca.accNumber WHERE ca.username = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
@@ -94,7 +122,7 @@ public class AccountDAOImpl implements AccountDAO {
 	/******************************************************************/
 	
 	@Override
-	public Account getAccountByNumber(Long accountNumber) {
+	public Account getAccountByNumber(long accountNumber) {
 		Account a = new Account();
 
 		try {
@@ -213,5 +241,32 @@ public class AccountDAOImpl implements AccountDAO {
 			return false;
 		}
 	}
-
+	
+	/******************************************************************/
+	
+	@Override
+	public boolean updateBalance(Account account) {
+		try {
+			conn = DAOUtil.getConnection();
+			String sql = "UPDATE ACCOUNTS SET balance = ? WHERE accNumber = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setDouble(1, account.getBalance());
+			ps.setLong(2, account.getNumber());
+			
+			if(ps.executeUpdate() != 0) {
+				ps.close();
+				return true;
+			} else {
+				ps.close();
+				return false;
+			} 
+			
+		} catch (SQLException e) {
+			e.getMessage();
+			return false;
+		} catch (IOException e) {
+			e.getMessage();
+			return false;
+		}
+	}
 }

@@ -10,6 +10,11 @@ public class Empolyee extends User {
 		this.isAdmin = isAdmin;
 	}
 	
+	public Empolyee(String username, String password, String firstName, String lastName) {
+		super(username, password, firstName, lastName);
+		this.isAdmin = false;
+	}
+	
 	public boolean isAdmin() {
 		return isAdmin;
 	}

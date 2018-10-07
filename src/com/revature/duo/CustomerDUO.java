@@ -4,6 +4,12 @@ import com.revature.dao.DAOUtil;
 
 public class CustomerDAO implements Transcationable {
     
+    public boolean createAccount(Account account) {
+		DAOUtil dao = new DAOUtil();
+		AccountDAO aDAO = dao.getAccountDAO();
+		return aDAO.addAccount();
+    }
+    
     @Override
 	public boolean depositMoney(Account account, double amount) {
 		DAOUtil dao = new DAOUtil();
@@ -16,13 +22,9 @@ public class CustomerDAO implements Transcationable {
 	      return false;
 	  }
 	        
-	  account.setBalance(currBalance + amount);
+	  account.setBalance(currBalance + amount);  
 	  
-	  // update account in SQL database
-	  if (aDAO.removeAccount(account)) {		
-		    return aDAO.addAccount(account);
-		}
-	  return false;
+	  return aDAO.updateBalance(account);
 	}
 	
 	@Override
@@ -39,11 +41,7 @@ public class CustomerDAO implements Transcationable {
         
         account.setBalance(currBalance - amount);
         
-	  // update account in SQL database
-	  if (aDAO.removeAccount(account)) {		
-		    return aDAO.addAccount(account);
-		}
-	  return false;
+		return aDAO.updateBalance(account);
 	}
 
 	@Override

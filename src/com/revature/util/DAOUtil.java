@@ -24,4 +24,8 @@ public class DAOUtil {
 	public static AccountDAO getAccountDAO {
 		return new AccountDAOImp();
 	}
+	
+	public static EmployeeDAO EmployeeDAO {
+		return new EmployeeDAOImp();
+	}
 }

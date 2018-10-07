@@ -23,13 +23,9 @@ public class AdminDAO implements Transcationable {
 	      return false;
 	  }
 	        
-	  account.setBalance(currBalance + amount);
+	  account.setBalance(currBalance + amount);  
 	  
-	  // update account in SQL database
-	  if (aDAO.removeAccount(account)) {		
-		    return aDAO.addAccount(account);
-		}
-	  return false;
+	  return aDAO.updateBalance(account);
 	}
 	
 	@Override
@@ -46,11 +42,7 @@ public class AdminDAO implements Transcationable {
         
         account.setBalance(currBalance - amount);
         
-	  // update account in SQL database
-	  if (aDAO.removeAccount(account)) {		
-		    return aDAO.addAccount(account);
-		}
-	  return false;
+		return aDAO.updateBalance(account);
 	}
 
 	@Override

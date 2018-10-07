@@ -15,7 +15,8 @@ enum User {
 
 public class BankingApp {
     public static void main(String[] args) {
-    	String key = new String();
+    	String key = "";
+    	String username = "";
     	Scanner s = new Scanner(System.in);
 
     	User user = null;
@@ -31,11 +32,12 @@ public class BankingApp {
         		// welcome pages
     			switch (toAction(key)) {
     			case REGISTER:
-    				user = Menus.registerMenu(s);
-    				 users.add(user);
+    				 user = Menus.registerMenu(s);
+    				 
     				 break;
     			case LOGIN:
-    				isLoggedIn = Menus.loginMenu(s, users);
+				username = Menus.loginMenu(s);
+				isLoggedIn = true
     				break;
     			case EXIT: 
     			    terminate = true;

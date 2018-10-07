@@ -64,8 +64,11 @@ public class Menus {
         return new Customer(resps.get(0),resps.get(1),resps.get(2),resps.get(3),resps.get(4),resps.get(5));
     }
 
-    static boolean loginMenu(Scanner scan) {
+    static String loginMenu(Scanner scan) {
+    User user = null;
     	List<String> responses = new ArrayList<>();
+
+	boolean isVerified = false;
 
     	do {
     		pageHeader("LOGIN PAGE");
@@ -73,10 +76,17 @@ public class Menus {
     		toConsole("Username: ");
     		responses.add(scan.nextLine());
     		toConsole("Password: ");
-    		responses.add(scan.nextLine());;    		
-    	} while(!loginVerification(responses));
+    		responses.add(scan.nextLine());
+    		
+    		user = loginVerification(responses);
+    		
+    		if(user != null) {
+		    isVerified = true;
+    		}
+    				
+    	} while(!isVerified);
 
-        return true;
+        return user.getUsername();
     }
 
     static String userOptionsMenu(Scanner scan) {
@@ -232,21 +242,32 @@ public class Menus {
     	return true;
     }
     
-    static boolean loginVerification(HashSet<User> users, List<String> resps) {
-    	for (User u : users) {
-			// found user name in users set
-			if (u.getUsername().contentEquals(resps.get(0))) {
-				// compare user password w/ entered password
-				if (u.getPassword().contentEquals(resps.get(1))) {
-					return true;
-				} else {
-					System.out.println("INCORRECT PASSWORD!");
-				}
-			}
-		}
+    static User loginVerification(List<String> resps) {
+		DAOUtil dao = new DAOUtil();
+    	     EmployeeDAO eDAO = dao.getEmployeeDAOImpl();
     	
-    	System.out.println("USERNAME NOT FOUND!");
-    	return false;
+    	     List<User> users = eDAO.getAllUsers();
+    	     User user = null;
+    	
+    	     boolean foundUser = false;
+    	
+    	     for (User u : users) {
+		     // found user name in users set
+		     if (u.getUsername().contentEquals(resps.get(0))) {
+			     // compare user password w/ entered password
+			     if (u.getPassword().contentEquals(resps.get(1))) {
+					user = u;
+				     foundUser = true;
+			     } else {
+				     System.out.println("INCORRECT PASSWORD!");
+			     }
+		    }
+	    }
+    	
+    	    if(!foundUser) {
+    	        System.out.println("USERNAME NOT FOUND!");
+		}
+    	    return user;
     }
 
     static Action toAction(String string) {

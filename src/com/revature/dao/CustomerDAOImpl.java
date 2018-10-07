@@ -60,7 +60,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM CUSTOMERS c INNER JOIN CUSTOMER_ACCOUNTS cs ON c.username = ca.username WHERE accNumber = ?";
+			String sql = "SELECT * FROM CUSTOMERS AS c INNER JOIN CUSTOMER_ACCOUNTS AS cs ON c.username = ca.username WHERE accNumber = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setLong(1, account.getNumber());
 			ResultSet rs = ps.executeQuery();
