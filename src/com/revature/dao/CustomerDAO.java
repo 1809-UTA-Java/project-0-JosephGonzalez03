@@ -10,6 +10,7 @@ public interface CustomerDAO {
 	public List<Customer> getCustomersByAccountNumber(Account account);
 	public List<Customer> getCustomersByFirstName(Customer customer);
 	public List<Customer> getCustomersByLastName(Customer customer);
+	public Customer getCustomerByUsername(String username);
 	
 	public boolean addCustomer(Customer customer);
 	public boolean deleteCustomer(Customer customer);

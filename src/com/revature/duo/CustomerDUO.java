@@ -10,6 +10,13 @@ public class CustomerDAO implements Transcationable {
 		return aDAO.addAccount();
     }
     
+    public List<Account> getAccounts(String customer_username) {
+	     DAOUtil dao = new DAOUtil();
+		AccountDAO aDAO = dao.getAccountDAO();
+		
+		return aDAO.getAccountsByUsername(customer_username);
+	}
+    
     public boolean isCustomer(User user) {
         DAOUtil dao = new DAOUtil();
         CustomerDAO cDAO = dao.getCustomerDAO();

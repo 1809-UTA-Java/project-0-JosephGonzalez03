@@ -2,7 +2,7 @@ package com.revature;
 
 public class Portals {
 
-     public static boolean customerPortal(Scanner s) {
+     public static boolean customerPortal(Customer c, Scanner s) {
            boolean accessingAccounts = false;  
 		   boolean isLoggedIn = true;
 		   

@@ -163,6 +163,41 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return customers;
 	}
 
+     /******************************************************************/
+	
+	@Override
+	public Customer getCustomerByUsername(String username) {
+		Customer c = null;
+		
+		try {
+			conn = DAOUtil.getConnection();
+			String sql = "SELECT * FROM CUSTOMERS WHERE username = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				String username = rs.getString("username");
+				String pwrd = rs.getString("pwrd");
+				String first = rs.getString("firstName");
+				String last = rs.getString("lastName");
+				int phone = rs.getInt("phone");
+				String email = rs.getString("email");
+				
+				c = new Customer(username, pwrd, first, last, phone, email);
+			}
+			
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.getMessage();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+		
+		return c;
+	} 
+
 	/******************************************************************/
 	
 	@Override

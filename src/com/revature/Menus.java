@@ -129,7 +129,8 @@ public class Menus {
     }
     
     static boolean accountsMenu(Scanner scan, Customer c) {
-    	Database db = new Database();
+    	DUOUtil duo =	new DUOUtil();
+    	CustomerDUO cDUO = duo.getCustomerDUO();
     	
     	// save user inputs for validation
     	String key = "";
@@ -138,7 +139,7 @@ public class Menus {
 		String name2 = "";
 		boolean validInput = false;
     	
-    	List<Account> accounts = db.getAccounts(c);
+    	List<Account> accounts = cDUO.getAccounts(c.getUsername());
     	Account currA = null, destA = null;
     	
     	pageHeader("ACCOUNT LEDGER");
@@ -199,8 +200,12 @@ public class Menus {
     				// check if account names exist
     				for(Account a : accounts) {
     					if (name1.contentEquals(a.getName())) {
-    						currA = a;
-    						validInput = true;
+    						if(a.isApproved()) {
+    						    currA = a;
+    						    validInput = true;
+    						} else {
+    						    System.out.println("Account: " + name1 + "is currently not aproved. Please wait 1 business day for new accounts to be approved.\n");
+    						}
     						break;
     					}
     				}
@@ -208,8 +213,13 @@ public class Menus {
     				if (!name2.isEmpty()) {
     					for(Account a : accounts) {
     						if (name2.contentEquals(a.getName())) {
-    							destA = a;
-    							validInput = true;
+    							if(a.isApproved()) {
+    							    destA = a;
+    							    validInput = true;
+    							} else {
+							    System.out.println("Account: " + name2 + "is currently not aproved. Please wait 1 business day for new accounts to be approved.\n");
+    							    validInput = false;
+    							}
     							break;
     						} 
     					}
@@ -227,13 +237,13 @@ public class Menus {
         	
         	switch (key) {
     		case "DEPOSIT":
-    			c.depositMoney(currA, amount);
+    			cDUO.depositMoney(currA, amount);
     			break;
     		case "WITHDRAW":
-    			c.withdrawMoney(currA, amount);
+    			cDUO.withdrawMoney(currA, amount);
     			break;
     		case "TRANSFER":
-    			c.transferMoney(currA, destA, amount);
+    			cDUO.transferMoney(currA, destA, amount);
     		default:
     			break;
     		}
