@@ -1,6 +1,6 @@
 package com.revature.models;
 
-public class Customer extends User implements Transactionable {
+public class Customer extends User {
 	// personal info
     private int phone; 
     private String email = new String();

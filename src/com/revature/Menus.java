@@ -1,13 +1,14 @@
 package com.revature;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import com.revature.database.Database;
+import com.revature.dao.EmployeeDAO;
+import com.revature.duo.CustomerDUO;
 import com.revature.models.*;
+import com.revature.util.*;
 
 public class Menus {
 	
@@ -32,36 +33,37 @@ public class Menus {
     }
 
     static Customer registerMenu(Scanner scan) {
-        List<String> resps = new ArrayList<>();
+        String username = "", pwrd = "", first = "", last = "", email = "";
+        int phone;
         String confirmedPassword = new String();
 
         pageHeader("USER ACCOUNT REGISTRATION");
 
         toConsole("Please enter user account information.");
         toConsole("Username: ");
-        resps.add(scan.nextLine());
+        username = scan.nextLine();
         
         // ask for password until password & confirmed password match
         do {
             toConsole("Password: ");
-            resps.add(scan.nextLine());
+            pwrd = scan.nextLine();
 
             toConsole("Confirm password: ");
             confirmedPassword = scan.nextLine();
-        } while (!resps.get(1).equals(confirmedPassword));
+        } while (!pwrd.contentEquals(confirmedPassword));
         
         pageHeader("ADDITIONAL USER INFORMATION");
     	toConsole("First Name: ");
-    	resps.add(scan.nextLine());
+    	first = scan.nextLine();
     	toConsole("Last Name: ");
-    	resps.add(scan.nextLine());
+    	last = scan.nextLine();
     	toConsole("Phone Number: ");
-    	resps.add(scan.nextLine());
+    	phone = scan.nextInt();
     	toConsole("E-MAIL: ");
-    	resps.add(scan.nextLine());
+    	email = scan.nextLine();
     	
     	toConsole("\n\n\n\n\n\n");
-        return new Customer(resps.get(0),resps.get(1),resps.get(2),resps.get(3),resps.get(4),resps.get(5));
+        return new Customer(username, pwrd, first, last, phone, email);
     }
 
     static String loginMenu(Scanner scan) {
@@ -103,9 +105,8 @@ public class Menus {
     
     static Account createAccountMenu(Scanner scan, Customer c) {
     	String resp = new String();
-    	Database db = new Database();
     	
-    	List<Account> accounts = db.getAccounts(c);
+    	List<Account> accounts = DUOUtil.getCustomerDUO().getAccounts(c.getUsername());
     	boolean sameName = false;
     	do {
     		pageHeader("CREATE BANK ACCOUNT PAGE");
@@ -129,8 +130,7 @@ public class Menus {
     }
     
     static boolean accountsMenu(Scanner scan, Customer c) {
-    	DUOUtil duo =	new DUOUtil();
-    	CustomerDUO cDUO = duo.getCustomerDUO();
+    	CustomerDUO cDUO = DUOUtil.getCustomerDUO();
     	
     	// save user inputs for validation
     	String key = "";
@@ -253,31 +253,30 @@ public class Menus {
     }
     
     static User loginVerification(List<String> resps) {
-		DAOUtil dao = new DAOUtil();
-    	     EmployeeDAO eDAO = dao.getEmployeeDAOImpl();
+    	EmployeeDAO eDAO = DAOUtil.getEmployeeDAO();
     	
-    	     List<User> users = eDAO.getAllUsers();
-    	     User user = null;
+    	List<User> users = eDAO.getAllUsers();
+    	User user = null;
     	
-    	     boolean foundUser = false;
+    	boolean foundUser = false;
     	
-    	     for (User u : users) {
-		     // found user name in users set
-		     if (u.getUsername().contentEquals(resps.get(0))) {
-			     // compare user password w/ entered password
-			     if (u.getPassword().contentEquals(resps.get(1))) {
-					user = u;
-				     foundUser = true;
-			     } else {
-				     System.out.println("INCORRECT PASSWORD!");
-			     }
+    	for (User u : users) {
+    		// found user name in users set
+		    if (u.getUsername().contentEquals(resps.get(0))) {
+		    	// compare user password w/ entered password
+			    if (u.getPassword().contentEquals(resps.get(1))) {
+			    	user = u;
+				    foundUser = true;
+			    } else {
+			    	System.out.println("INCORRECT PASSWORD!");
+			    }
 		    }
 	    }
     	
-    	    if(!foundUser) {
-    	        System.out.println("USERNAME NOT FOUND!");
+    	if(!foundUser) {
+    		System.out.println("USERNAME NOT FOUND!");
 		}
-    	    return user;
+    	return user;
     }
 
     static Action toAction(String string) {

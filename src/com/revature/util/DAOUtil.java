@@ -17,15 +17,15 @@ public class DAOUtil {
 		return DriverManager.getConnection(url, username, password);
 	}
 	
-	public static CustomerDAO getCustomerDAO {
+	public static CustomerDAO getCustomerDAO() {
 		return new CustomerDAOImpl();
 	}
 	
-	public static AccountDAO getAccountDAO {
-		return new AccountDAOImp();
+	public static AccountDAO getAccountDAO() {
+		return new AccountDAOImpl();
 	}
 	
-	public static EmployeeDAO EmployeeDAO {
-		return new EmployeeDAOImp();
+	public static EmployeeDAO getEmployeeDAO() {
+		return new EmployeeDAOImpl();
 	}
 }

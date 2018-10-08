@@ -1,25 +1,26 @@
 package com.revature.duo;
 
-import com.revature.dao.DAOUtil;
+import java.util.List;
 
-public class CustomerDAO implements Transcationable {
-    
+import com.revature.dao.*;
+import com.revature.models.*;
+import com.revature.util.DAOUtil;
+
+public class CustomerDUO implements Transactionable {
+	
     public boolean createAccount(Account account) {
-		DAOUtil dao = new DAOUtil();
-		AccountDAO aDAO = dao.getAccountDAO();
-		return aDAO.addAccount();
+		AccountDAO aDAO = DAOUtil.getAccountDAO();
+		return aDAO.addAccount(account);
     }
     
     public List<Account> getAccounts(String customer_username) {
-	     DAOUtil dao = new DAOUtil();
-		AccountDAO aDAO = dao.getAccountDAO();
+		AccountDAO aDAO = DAOUtil.getAccountDAO();
 		
 		return aDAO.getAccountsByUsername(customer_username);
 	}
     
     public boolean isCustomer(User user) {
-        DAOUtil dao = new DAOUtil();
-        CustomerDAO cDAO = dao.getCustomerDAO();
+        CustomerDAO cDAO = DAOUtil.getCustomerDAO();
         
         List<Customer> customers = cDAO.getAllCustomers();
         return customers.contains(user);
@@ -27,8 +28,7 @@ public class CustomerDAO implements Transcationable {
     
     @Override
 	public boolean depositMoney(Account account, double amount) {
-		DAOUtil dao = new DAOUtil();
-		AccountDAO aDAO = dao.getAccountDAO();
+		AccountDAO aDAO = DAOUtil.getAccountDAO();
 		
 		double currBalance = account.getBalance();
 		
@@ -39,11 +39,13 @@ public class CustomerDAO implements Transcationable {
 	        
 	  account.setBalance(currBalance + amount);  
 	  
-	  return aDAO.updateBalance(account);
+	  return aDAO.updateBalance(account.getNumber(), account.getBalance());
 	}
 	
 	@Override
 	public boolean withdrawMoney(Account account, double amount) {
+		AccountDAO aDAO = DAOUtil.getAccountDAO();
+		
 		double currBalance = account.getBalance();
 		if (amount < 0) {
             System.out.println("AMOUNT CANNOT BE NEGATIVE!");
@@ -56,7 +58,7 @@ public class CustomerDAO implements Transcationable {
         
         account.setBalance(currBalance - amount);
         
-		return aDAO.updateBalance(account);
+		return aDAO.updateBalance(account.getNumber(), account.getBalance());
 	}
 
 	@Override

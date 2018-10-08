@@ -1,12 +1,15 @@
 package com.revature;
 
-import java.util.HashSet;
 import java.util.Scanner;
 
+import com.revature.dao.*;
+import com.revature.duo.*;
 import com.revature.models.*;
+import com.revature.util.DAOUtil;
+import com.revature.util.DUOUtil;
 
 enum Action {
-	REGISTER, LOGIN, CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER,BACK, LOGOUT, EXIT, NOTHING;
+	REGISTER, LOGIN, CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER, BACK, LOGOUT, EXIT, NOTHING;
 }
 
 enum BankUser {
@@ -19,32 +22,30 @@ public class BankingApp {
     	String username = "";
     	Scanner s = new Scanner(System.in);
 
-     // dao objects
-     DAOUtil dao = new DAOUtil();
-	CustomerDAO cDAO = dao.getCustomerDAO();
+    	// dao objects
+    	CustomerDAO cDAO = DAOUtil.getCustomerDAO();
 
-     // duo objects
-    	DUOUtil duo =	new DUOUtil();
-    	EmployeeDUO eDUO = duo.getEmployeeDUO();
-    	CustomerDUO cDUO = duo.getCustomerDUO();
+    	// duo objects
+    	EmployeeDUO eDUO = DUOUtil.getEmployeeDUO();
+    	CustomerDUO cDUO = DUOUtil.getCustomerDUO();
     	
     	// users
     	User user = null;
     	Employee employee = null;
     	Customer customer = null;
     	
-    	BankUser bankUser;
+    	BankUser bankUser = null;
     	
     	boolean terminate = false;
     	boolean isLoggedIn = false;	
     	
     	while(!terminate) {
-    		// login proceedure 
+    		// login procedure 
     		if (!isLoggedIn) {
     			key = Menus.startMenu(s);
     			
         		// welcome pages
-    			switch (toAction(key)) {
+    			switch (Menus.toAction(key)) {
     			case REGISTER:
     				 user = Menus.registerMenu(s);
     				 break;
@@ -67,7 +68,7 @@ public class BankingApp {
 				    bankUser = employee.isAdmin() ? BankUser.ADMIN : BankUser.EMPLOYEE;
 				}
 				
-				isLoggedIn = true
+				isLoggedIn = true;
     				break;
     			case EXIT: 
     			    terminate = true;

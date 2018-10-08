@@ -177,14 +177,14 @@ public class CustomerDAOImpl implements CustomerDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				String username = rs.getString("username");
+				String usrn = rs.getString("username");
 				String pwrd = rs.getString("pwrd");
 				String first = rs.getString("firstName");
 				String last = rs.getString("lastName");
 				int phone = rs.getInt("phone");
 				String email = rs.getString("email");
 				
-				c = new Customer(username, pwrd, first, last, phone, email);
+				c = new Customer(usrn, pwrd, first, last, phone, email);
 			}
 			
 			rs.close();
@@ -235,9 +235,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 	
 	@Override
 	public boolean deleteCustomer(Customer customer) {
-		Customer c = null;
-		List<Customer> customers = new ArrayList<>();
-		
 		try {
 			conn = DAOUtil.getConnection();
 			String sql = "DELETE FROM CUSTOMERS WHERE username = ?";

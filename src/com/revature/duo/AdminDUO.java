@@ -1,19 +1,20 @@
 package com.revature.duo;
 
-import com.revature.dao.DAOUtil;
+import com.revature.dao.AccountDAO;
+import com.revature.models.Account;
+import com.revature.util.DAOUtil;
 
-public class AdminDAO implements Transcationable {
+public class AdminDUO implements Transactionable {
     
-    public boolean cancelAccount(Account account) {
-		DAOUtil dao = new DAOUtil();
+	DAOUtil dao = new DAOUtil();
+	
+	public boolean cancelAccount(Account account) {
 		AccountDAO aDAO = dao.getAccountDAO();
-		
-		return aDAO.removeAccount();
+		return aDAO.removeAccount(account);
 	}
     
     @Override
 	public boolean depositMoney(Account account, double amount) {
-		DAOUtil dao = new DAOUtil();
 		AccountDAO aDAO = dao.getAccountDAO();
 		
 		double currBalance = account.getBalance();
@@ -25,12 +26,15 @@ public class AdminDAO implements Transcationable {
 	        
 	  account.setBalance(currBalance + amount);  
 	  
-	  return aDAO.updateBalance(account);
+	  return aDAO.updateBalance(account.getNumber(), account.getBalance());
 	}
 	
 	@Override
 	public boolean withdrawMoney(Account account, double amount) {
+		AccountDAO aDAO = dao.getAccountDAO();
+		
 		double currBalance = account.getBalance();
+
 		if (amount < 0) {
             System.out.println("AMOUNT CANNOT BE NEGATIVE!");
             return false;
@@ -42,7 +46,7 @@ public class AdminDAO implements Transcationable {
         
         account.setBalance(currBalance - amount);
         
-		return aDAO.updateBalance(account);
+		return aDAO.updateBalance(account.getNumber(), account.getBalance());
 	}
 
 	@Override

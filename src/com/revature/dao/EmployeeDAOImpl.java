@@ -1,10 +1,22 @@
 package com.revature.dao;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.models.Employee;
+import com.revature.models.User;
+import com.revature.util.DAOUtil;
 
-public interface EmployeeDAO {
+public class EmployeeDAOImpl implements EmployeeDAO {
+	
+	Connection conn = null;
+	PreparedStatement ps = null;
+	
     public List<User> getAllUsers() {
 		User u = null;
 		List<User> users = new ArrayList<>();
@@ -53,21 +65,21 @@ public interface EmployeeDAO {
 				String pwrd = rs.getString("pwrd");
 				String first = rs.getString("firstName");
 				String last = rs.getString("lastName");
-				String isAdmin = Boolean.parseBoolean(rs.getString("isAdmin"));
+				boolean isAdmin = Boolean.parseBoolean(rs.getString("isAdmin"));
 				
 				e = new Employee(username, pwrd, first, last, isAdmin);
-				employeess.add(e);
+				employees.add(e);
 			}
 			
 			rs.close();
 			ps.close();
-		} catch (SQLException e) {
-			e.getMessage();
-		} catch (IOException e) {
-			e.getMessage();
+		} catch (SQLException ex) {
+			ex.getMessage();
+		} catch (IOException ex) {
+			ex.getMessage();
 		}
 		
-		return users;
+		return employees;
     }
     
     /******************************************************************/
@@ -77,7 +89,7 @@ public interface EmployeeDAO {
 			conn = DAOUtil.getConnection();
 			String sql = "UPDATE EMPLOYEES SET isAdmin = true WHERE username = ?";
 			ps = conn.prepareStatement(sql);
-			ps.setDouble(1, employee.getUsername());
+			ps.setString(1, employee.getUsername());
 			
 			if(ps.executeUpdate() != 0) {
 				ps.close();
@@ -103,7 +115,7 @@ public interface EmployeeDAO {
 			conn = DAOUtil.getConnection();
 			String sql = "UPDATE EMPLOYEES SET isAdmin = false WHERE username = ?";
 			ps = conn.prepareStatement(sql);
-			ps.setDouble(1, employee.getUsername());
+			ps.setString(1, employee.getUsername());
 			
 			if(ps.executeUpdate() != 0) {
 				ps.close();
