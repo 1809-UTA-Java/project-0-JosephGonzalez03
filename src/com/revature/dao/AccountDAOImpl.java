@@ -30,7 +30,7 @@ public class AccountDAOImpl implements AccountDAO {
 				Account a = new Account();
 				
 				a.setNumber(rs.getLong("accNumber"));
-				a.setUsername(rs.getString("username"));
+				a.setName(rs.getString("username"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
@@ -64,7 +64,7 @@ public class AccountDAOImpl implements AccountDAO {
 				Account a = new Account();
 				
 				a.setNumber(rs.getLong("accNumber"));
-				a.setUsername(rs.getString("username"));
+				a.setName(rs.getString("username"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
@@ -100,7 +100,7 @@ public class AccountDAOImpl implements AccountDAO {
 				Account a = new Account();
 				
 				a.setNumber(rs.getLong("accNumber"));
-				a.setUsername(rs.getString("username"));
+				a.setName(rs.getString("username"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
@@ -134,7 +134,7 @@ public class AccountDAOImpl implements AccountDAO {
 			
 			while(rs.next()) {
 				a.setNumber(rs.getLong("accNumber"));
-				a.setUsername(rs.getString("username"));
+				a.setName(rs.getString("username"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
 			a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
@@ -160,17 +160,17 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS WHERE accName = ?";
+			String sql = "SELECT * FROM ACCOUNTS WHERE accName LIKE ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, accountName);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {			
 				a.setNumber(rs.getLong("accNumber"));
-				a.setUsername(rs.getString("username"));
+				a.setName(rs.getString("username"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
-		a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
+				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
 			}
 			
 			rs.close();
@@ -193,7 +193,7 @@ public class AccountDAOImpl implements AccountDAO {
 			String sql = "INSERT INTO ACCOUNTS VALUES (?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			ps.setLong(1, account.getNumber());
-			ps.setString(2, account.getUsername());
+			ps.setString(2, account.getName());
 			ps.setString(3, account.getName());
 			ps.setDouble(4, account.getBalance());
 			ps.setBoolean(5, account.isApproved());
@@ -245,13 +245,13 @@ public class AccountDAOImpl implements AccountDAO {
 	/******************************************************************/
 	
 	@Override
-	public boolean updateBalance(Account account) {
+	public boolean updateBalance(long accountNumber, double balance) {
 		try {
 			conn = DAOUtil.getConnection();
 			String sql = "UPDATE ACCOUNTS SET balance = ? WHERE accNumber = ?";
 			ps = conn.prepareStatement(sql);
-			ps.setDouble(1, account.getBalance());
-			ps.setLong(2, account.getNumber());
+			ps.setLong(1, accountNumber);
+			ps.setDouble(2, balance);
 			
 			if(ps.executeUpdate() != 0) {
 				ps.close();

@@ -1,7 +1,5 @@
 package com.revature.models;
 
-import com.revature.dao.*;
-
 public class Employee extends User {
 	private boolean isAdmin;
 

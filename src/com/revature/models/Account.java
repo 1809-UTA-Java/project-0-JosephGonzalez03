@@ -16,7 +16,7 @@ public class Account {
 		this.isApproved = isApproved;
 	}
     
-    // used to initially create unapproved account
+    // used to initially create non approved account
     public Account(long number, String name, double balance) {
 		super();
 		this.number = number;
@@ -71,6 +71,6 @@ public class Account {
     
     @Override
      public boolean equals(Object obj) {
-        return (this.number.equals(((Account) obj).number);
+        return (this.number == ((Account) obj).number);
 	}
 }

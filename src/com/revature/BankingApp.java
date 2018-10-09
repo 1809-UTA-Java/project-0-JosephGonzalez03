@@ -9,7 +9,8 @@ import com.revature.util.DAOUtil;
 import com.revature.util.DUOUtil;
 
 enum Action {
-	REGISTER, LOGIN, CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER, BACK, LOGOUT, EXIT, NOTHING;
+	REGISTER, LOGIN, CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER, 
+	SHOW, GET, APPROVE, DENY, CANCEL, BACK, LOGOUT, EXIT, NOTHING;
 }
 
 enum BankUser {
@@ -25,10 +26,6 @@ public class BankingApp {
     	// dao objects
     	CustomerDAO cDAO = DAOUtil.getCustomerDAO();
 
-    	// duo objects
-    	EmployeeDUO eDUO = DUOUtil.getEmployeeDUO();
-    	CustomerDUO cDUO = DUOUtil.getCustomerDUO();
-    	
     	// users
     	User user = null;
     	Employee employee = null;
@@ -50,21 +47,19 @@ public class BankingApp {
     				 user = Menus.registerMenu(s);
     				 break;
     			case LOGIN:
-				username = Menus.loginMenu(s);
+    				username = Menus.loginMenu(s);
 				
-				// get full user profile from sql database
-				user = cDAO.getCustomerByUsername(username);
+    				// get full user profile from sql database
+    				user = cDAO.getCustomerByUsername(username);
 				
 				// determine if user is customer or employee
 				if (user instanceof Customer) {
 				    customer = (Customer) user;
 				    employee = null;
-				    
 				    bankUser = BankUser.CUSTOMER;
 				} else {
 				    customer = null;
 				    employee = (Employee) user;
-				    
 				    bankUser = employee.isAdmin() ? BankUser.ADMIN : BankUser.EMPLOYEE;
 				}
 				
@@ -78,13 +73,13 @@ public class BankingApp {
     		} else {
     		    switch(bankUser) {
     		    case ADMIN: 
-    		    
+    		    	Portals.adminPortal(employee, s);
     		        break;
     		     case EMPLOYEE: 
-    		    
+    		    	 Portals.employeePortal(employee, s);
     		        break;
 			case CUSTOMER: 
-    		    
+    		    	Portals.customerPortal(customer, s);
     		        break;
 			default:
 				break;
