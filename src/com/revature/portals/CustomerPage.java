@@ -5,20 +5,23 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.revature.duo.CustomerDUO;
+import com.revature.duo.EmployeeDUO;
 import com.revature.models.Account;
 import com.revature.models.Customer;
 import com.revature.util.DUOUtil;
 
 public class CustomerPage implements Viewable {
 	CustomerDUO cDUO = DUOUtil.getCustomerDUO();
+	EmployeeDUO eDUO = DUOUtil.getEmployeeDUO();
 
 	@Override
 	public String optionsMenu(Scanner scan) {
 		Menus.pageHeader("ACCOUNT MANAGEMENT PAGE");
 		toConsole("What would you like to do?");
-		toConsole("1. CREATE a new account");
-		toConsole("2. ACCESS an existing account");
-		toConsole("3. LOGOUT");
+		toConsole("1. CREATE a new account or joint account");
+		toConsole("2. ADD user to existing account");
+		toConsole("3. ACCESS an existing account");
+		toConsole("4. LOGOUT");
 		toConsole("Choose action: ");
 
 		return scan.nextLine();
@@ -27,7 +30,7 @@ public class CustomerPage implements Viewable {
 	public void createAccountMenu(Scanner scan, Customer c) {
 		String resp = new String();
 
-		List<Account> accounts = DUOUtil.getCustomerDUO().getAccounts(c.getUsername());
+		List<Account> accounts = cDUO.getAccounts(c.getUsername());
 		boolean sameName = false;
 		do {
 			Menus.pageHeader("CREATE BANK ACCOUNT PAGE");
@@ -47,6 +50,49 @@ public class CustomerPage implements Viewable {
 
 		cDUO.createAccount(c.getUsername(), new Account(resp));
 		toConsole("\nNew account " + resp + " created!");
+	}
+	
+	
+	
+	public void addUserToAccountMenu(Scanner scan, Customer c) {
+		String resp = new String();
+
+		List<Customer> customers = eDUO.getCustomers();
+		List<Account> accounts = cDUO.getAccounts(c.getUsername());
+		Customer addC = null;
+		Account addA = null;
+		
+		boolean createdJoint = false;
+		int failCounter = 0;
+		
+		do {
+			Menus.pageHeader("CREATE JOINT ACCOUNT PAGE");
+			toConsole("Enter fields for new account: ");
+			toConsole("Customer's Username to Add: ");
+			resp = scan.nextLine();
+			addC = eDUO.getCustomer(resp);
+			
+			if (customers.contains(addC)) {
+				toConsole("Account Name to add to: ");
+				resp = scan.nextLine();
+				addA = eDUO.getAccount(resp);
+				
+				if (accounts.contains(addA)) {
+					cDUO.createAccount(addC.getUsername(), addA);
+					System.out.println("Successfully add " + addC.getUsername() + " to " + addA.getName() + "!");
+					break;
+				} else {
+					System.out.println("INVALID ACCOUNT NAME!\n");
+				}
+			} else {
+				System.out.println("INVALID USERNAME!\n");
+			}
+			failCounter++;
+			
+			if(failCounter == 3) {
+				System.out.println("You ran out of attempts!");
+			}
+		} while(!createdJoint && failCounter < 3);
 	}
 
 	@Override

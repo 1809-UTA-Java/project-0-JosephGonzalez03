@@ -12,7 +12,7 @@ public class Portals {
 		String key = "";
 
 		boolean lookingAtAccounts = false;
-
+		
 		while(true) {
 			if (!lookingAtAccounts) {
 				key = cp.optionsMenu(s);
@@ -21,6 +21,9 @@ public class Portals {
 				switch (Menus.toAction(key)) {
 				case CREATE:
 					cp.createAccountMenu(s, c);
+					break;
+				case ADD:
+					cp.addUserToAccountMenu(s, c);
 					break;
 				case ACCESS:
 					lookingAtAccounts = true;

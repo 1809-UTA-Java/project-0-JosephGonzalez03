@@ -48,6 +48,9 @@ public class BankingApp {
     			case LOGIN:
     				username = Menus.loginMenu(s);
 				
+    				if (username == null) {
+    					continue;
+    				}
     				// get full user profile from sql database
     				user = cDAO.getCustomerByUsername(username);
 				
@@ -84,8 +87,6 @@ public class BankingApp {
     		    	 break;
     		    }
     		}
-    		
-    		/////
     	}
     	s.close();
 	}

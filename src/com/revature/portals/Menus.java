@@ -9,7 +9,7 @@ import com.revature.models.*;
 import com.revature.util.*;
 
 enum Action {
-	CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER, 
+	CREATE, ACCESS, ADD, DEPOSIT, WITHDRAW, TRANSFER, 
 	SHOW, GET, APPROVE, DENY, CANCEL, BACK, LOGOUT, NOTHING;
 }
 
@@ -98,7 +98,7 @@ public class Menus {
     		failedCounter++;
     	} while(!isVerified && failedCounter < 3);
 
-        return user.getUsername();
+        return (user == null) ? null : user.getUsername();
     }
 
 	public static User loginVerification(List<String> resps) {
