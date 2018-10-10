@@ -5,12 +5,13 @@ import java.util.Scanner;
 import com.revature.dao.*;
 import com.revature.duo.*;
 import com.revature.models.*;
-import com.revature.util.DAOUtil;
+import com.revature.portals.Menus;
+import com.revature.portals.Portals;
+import com.revature.util.*;
 import com.revature.util.DUOUtil;
 
 enum Action {
-	REGISTER, LOGIN, CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER, 
-	SHOW, GET, APPROVE, DENY, CANCEL, BACK, LOGOUT, EXIT, NOTHING;
+	REGISTER, LOGIN, LOGOUT, EXIT, NOTHING;
 }
 
 enum BankUser {
@@ -42,7 +43,7 @@ public class BankingApp {
     			key = Menus.startMenu(s);
     			
         		// welcome pages
-    			switch (Menus.toAction(key)) {
+    			switch (toAction(key)) {
     			case REGISTER:
     				 user = Menus.registerMenu(s);
     				 break;
@@ -90,4 +91,15 @@ public class BankingApp {
     		/////
     	}
 	}
+    
+    static Action toAction(String string) {
+    	Action action = Action.NOTHING;
+ 
+    	try {
+    		action = Action.valueOf(string.toUpperCase());
+    	} catch (IllegalArgumentException e) {
+    		System.out.println("INVALID KEYWORD ENTERED!");
+    	}
+    	return action;
+    }
 }

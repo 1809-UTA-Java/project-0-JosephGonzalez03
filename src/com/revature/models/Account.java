@@ -2,46 +2,38 @@ package com.revature.models;
 
 
 public class Account {
-	private long number = 0;
+	private static int counter = 100000;
+	private int number = 0;
     private String name = new String();
     private double balance = 0.00;
     private boolean isApproved;
     
     // used for pulling from database
-    public Account(long number, String name, double balance, boolean isApproved) {
+    public Account(int number, String name, double balance, boolean isApproved) {
 		super();
 		this.number = number;
 		this.name = name;
 		this.balance = balance;
 		this.isApproved = isApproved;
 	}
-    
-    // used to initially create non approved account
-    public Account(long number, String name, double balance) {
-		super();
-		this.number = number;
-		this.name = name;
-		this.balance = balance;
-		this.isApproved = false;
-	}
    
     // used when initially creating account
 	public Account(String name) {
 		super();
+		this.number = ++counter;
 		this.name = name;
 		this.balance = 0.00;
 		this.isApproved = false;
 	}
 	
 	public Account() {
-		
 	}
 	
-	public long getNumber() {
+	public int getNumber() {
 		return number;
 	}
 
-	public void setNumber(long number) {
+	public void setNumber(int number) {
 		this.number = number;
 	}
 
@@ -71,6 +63,6 @@ public class Account {
     
     @Override
      public boolean equals(Object obj) {
-        return (this.number == ((Account) obj).number);
+        return (this.number == ((Account) obj).getNumber());
 	}
 }

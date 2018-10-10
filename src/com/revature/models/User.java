@@ -6,14 +6,12 @@ public class User {
 	protected String password = new String();
 	protected String firstName = new String();
 	protected String lastName = new String();
-	protected String userID = new String();
 
 	public User(String username, String password, String firstName, String lastName) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.userID = ""; // add random id generator later
 	}
 
 	public String getUsername() {

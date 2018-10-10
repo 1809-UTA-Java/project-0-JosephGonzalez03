@@ -1,34 +1,37 @@
-package com.revature;
+package com.revature.portals;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import com.revature.dao.EmployeeDAO;
-import com.revature.duo.CustomerDUO;
 import com.revature.models.*;
 import com.revature.util.*;
 
+enum Action {
+	CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER, 
+	SHOW, GET, APPROVE, DENY, CANCEL, BACK, NOTHING;
+}
+
 public class Menus {
 	
-    static void toConsole(String message) {
+	public static void toConsole(String message) {
         System.out.println(message);
     }
     
-    static void pageHeader(String pageName) {
+	public static void pageHeader(String pageName) {
     	  toConsole("\n\n\n=====================================");
           toConsole(pageName);
           toConsole("=====================================");
     }
     
-    static void tableHeader(String tableName) {
+	public static void tableHeader(String tableName) {
   	  toConsole("\n\n\n");
         toConsole(tableName);
         toConsole("---------------------------------------");
-  }
+	}
     
-    static String startMenu(Scanner scan) {
+	public static String startMenu(Scanner scan) {
         toConsole("Welcome to your Personal Banking Application!\n");
         toConsole("1. REGISTER for a user account");
         toConsole("2. LOGIN fromTo an existing one");
@@ -38,7 +41,7 @@ public class Menus {
         return scan.nextLine();
     }
 
-    static Customer registerMenu(Scanner scan) {
+	public static Customer registerMenu(Scanner scan) {
         String username = "", pwrd = "", first = "", last = "", email = "";
         int phone;
         String confirmedPassword = new String();
@@ -72,11 +75,11 @@ public class Menus {
         return new Customer(username, pwrd, first, last, phone, email);
     }
 
-    static String loginMenu(Scanner scan) {
-    User user = null;
+	public static String loginMenu(Scanner scan) {
+		User user = null;
     	List<String> responses = new ArrayList<>();
 
-	boolean isVerified = false;
+    	boolean isVerified = false;
 
     	do {
     		pageHeader("LOGIN PAGE");
@@ -97,7 +100,7 @@ public class Menus {
         return user.getUsername();
     }
 
-    static User loginVerification(List<String> resps) {
+	public static User loginVerification(List<String> resps) {
     	EmployeeDAO eDAO = DAOUtil.getEmployeeDAO();
     	
     	List<User> users = eDAO.getAllUsers();
@@ -124,7 +127,7 @@ public class Menus {
     	return user;
     }
 
-    static void displayAccountContents(Account a) {
+	public static void displayAccountContents(Account a) {
     	if (a.isApproved()) {
     		System.out.format("%15s %15d %15.2f \n\n", a.getName(), a.getNumber(), a.getBalance());
     	} else {
@@ -132,11 +135,11 @@ public class Menus {
     	}
     }
     
-    static void displayCustomerProfile(Customer c) {
+	public static void displayCustomerProfile(Customer c) {
     	System.out.format("%20s %20s %20s %10d %20s \n\n", c.getFirstName(), c.getLastName(), c.getUsername(), c.getPhone(), c.getEmail());
     }
     
-    static void displayEmployeeProfile(Employee e) {
+	public static void displayEmployeeProfile(Employee e) {
     	if (e.isAdmin()) {
     		System.out.format("%20s %20d %20s %15s \n\n", e.getFirstName(), e.getLastName(), e.getUsername(), "[ADMIN]");
     	} else {
@@ -144,7 +147,7 @@ public class Menus {
     	}
     }
     
-    static Action toAction(String string) {
+	public static Action toAction(String string) {
     	Action action = Action.NOTHING;
  
     	try {
@@ -152,7 +155,6 @@ public class Menus {
     	} catch (IllegalArgumentException e) {
     		System.out.println("INVALID KEYWORD ENTERED!");
     	}
-    	
     	return action;
     }
 }

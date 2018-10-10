@@ -56,7 +56,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM EMPLOYEES";
+			String sql = "SELECT * FROM EMPLOYEES ORDER BY username ASC";
 			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			

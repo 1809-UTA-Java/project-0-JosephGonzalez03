@@ -97,7 +97,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM CUSTOMERS WHERE firstName LIKE ?";
+			String sql = "SELECT * FROM CUSTOMERS WHERE firstName LIKE ? ORDER BY username ASC";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, customer.getFirstName());
 			ResultSet rs = ps.executeQuery();
@@ -135,7 +135,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM CUSTOMERS WHERE firstName LIKE ?";
+			String sql = "SELECT * FROM CUSTOMERS WHERE firstName LIKE ? ORDER BY username ASC";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, customer.getLastName());
 			ResultSet rs = ps.executeQuery();

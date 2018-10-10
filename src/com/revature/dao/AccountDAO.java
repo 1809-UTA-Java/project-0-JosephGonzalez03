@@ -8,10 +8,10 @@ public interface AccountDAO {
 	public List<Account> getAllAccounts();
 	public List<Account> getUnapprovedAccounts();
 	public List<Account> getAccountsByUsername(String userName);
-	public Account getAccountByNumber(long accountNumber);
+	public Account getAccountByNumber(int accountNumber);
 	public Account getAccountByName(String accountName);
 	
 	public boolean addAccount(Account account);
 	public boolean removeAccount(Account account);
-	public boolean updateBalance(long accountNumber, double balance);
+	public boolean updateBalance(int accountNumber, double balance);
 }

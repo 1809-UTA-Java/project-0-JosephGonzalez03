@@ -22,15 +22,14 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS";
+			String sql = "SELECT * FROM ACCOUNTS ORDER BY accNumber ASC";
 			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
 				Account a = new Account();
 				
-				a.setNumber(rs.getLong("accNumber"));
-				a.setName(rs.getString("username"));
+				a.setNumber(rs.getInt("accNumber"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
@@ -56,15 +55,14 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS WHERE isApprove = false";
+			String sql = "SELECT * FROM ACCOUNTS WHERE isApprove = false ORDER BY accNumber ASC";
 			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
 				Account a = new Account();
 				
-				a.setNumber(rs.getLong("accNumber"));
-				a.setName(rs.getString("username"));
+				a.setNumber(rs.getInt("accNumber"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
@@ -99,8 +97,7 @@ public class AccountDAOImpl implements AccountDAO {
 			while(rs.next()) {
 				Account a = new Account();
 				
-				a.setNumber(rs.getLong("accNumber"));
-				a.setName(rs.getString("username"));
+				a.setNumber(rs.getInt("accNumber"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
@@ -122,22 +119,21 @@ public class AccountDAOImpl implements AccountDAO {
 	/******************************************************************/
 	
 	@Override
-	public Account getAccountByNumber(long accountNumber) {
+	public Account getAccountByNumber(int accountNumber) {
 		Account a = new Account();
 
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS WHERE accNumber LIKE ?";
+			String sql = "SELECT * FROM ACCOUNTS WHERE accNumber = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setLong(1, accountNumber);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				a.setNumber(rs.getLong("accNumber"));
-				a.setName(rs.getString("username"));
+				a.setNumber(rs.getInt("accNumber"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
-			a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
+				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
 			}
 			
 			
@@ -160,14 +156,13 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS WHERE accName LIKE ?";
+			String sql = "SELECT * FROM ACCOUNTS WHERE accName = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, accountName);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {			
-				a.setNumber(rs.getLong("accNumber"));
-				a.setName(rs.getString("username"));
+				a.setNumber(rs.getInt("accNumber"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
@@ -192,11 +187,11 @@ public class AccountDAOImpl implements AccountDAO {
 			conn = DAOUtil.getConnection();
 			String sql = "INSERT INTO ACCOUNTS VALUES (?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
-			ps.setLong(1, account.getNumber());
+			ps.setInt(1, account.getNumber());
 			ps.setString(2, account.getName());
 			ps.setString(3, account.getName());
 			ps.setDouble(4, account.getBalance());
-			ps.setBoolean(5, account.isApproved());
+			ps.setString(5, Boolean.toString(account.isApproved()));
 	
 			if(ps.executeUpdate() != 0) {
 				ps.close();
@@ -245,7 +240,7 @@ public class AccountDAOImpl implements AccountDAO {
 	/******************************************************************/
 	
 	@Override
-	public boolean updateBalance(long accountNumber, double balance) {
+	public boolean updateBalance(int accountNumber, double balance) {
 		try {
 			conn = DAOUtil.getConnection();
 			String sql = "UPDATE ACCOUNTS SET balance = ? WHERE accNumber = ?";
