@@ -125,8 +125,9 @@ public class Menus {
     }
 
 	public static void accountsTable(List<Account> accounts) {
-		System.out.format("%15s %15s %15s \n", "", "ACCOUNTS", "");
-		toConsole("-----------------------------------------------------------------");
+		toConsole("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		System.out.format("%17s %15s %15s \n", "", "ACCOUNTS", "");
+		toConsole("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.format("%15s %15s %15s \n", "Name", "Number", "Balance");
 		toConsole("-----------------------------------------------------------------");
 		accounts.forEach(a -> Menus.displayAccountContents(a));
@@ -135,8 +136,9 @@ public class Menus {
 	}
 	
 	public static void customerTable(Customer customer) {
-		System.out.format("%19s %19s %19s \n", "", "CUSTOMER", "");
-		toConsole("------------------------------------------------------------------");
+		toConsole("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		System.out.format("%17s %19s %19s \n", "", "CUSTOMER", "");
+		toConsole("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.format("%12s %12s %12s %12s %12s \n", "First Name", "Last Name", "Username", "Phone #", "E-mail");
 		toConsole("------------------------------------------------------------------");
 		Menus.displayCustomerProfile(customer);
@@ -144,8 +146,9 @@ public class Menus {
 	}
 	
 	public static void customersTable(List<Customer> customers) {
-		System.out.format("%19s %19s %19s \n", "", "CUSTOMERS", "");
-		toConsole("------------------------------------------------------------------");
+		toConsole("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		System.out.format("%17s %19s %19s \n", "", "CUSTOMERS", "");
+		toConsole("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.format("%12s %12s %12s %12s %12s \n", "First Name", "Last Name", "Username", "Phone #", "E-mail");
 		toConsole("------------------------------------------------------------------");
 		customers.forEach(c -> Menus.displayCustomerProfile(c));
@@ -153,8 +156,9 @@ public class Menus {
 	}
 
 	public static void employeesTable(List<Employee> employees) {
-		System.out.format("%12s %12s %12s \n", "", "EMPLOYEES", "");
-		toConsole("-------------------------------------------------------");
+		toConsole("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		System.out.format("%16s %12s %12s \n", "", "EMPLOYEES", "");
+		toConsole("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.format("%12s %12s %12s \n", "First Name", "Last Name", "Username");
 		toConsole("-------------------------------------------------------");
 		employees.forEach(e -> Menus.displayEmployeeProfile(e));
