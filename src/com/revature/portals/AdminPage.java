@@ -34,7 +34,7 @@ public class AdminPage implements Viewable {
     	toConsole("4. APPROVE [account number]");
 		toConsole("5. DENY [account number]");
 		toConsole("6. CANCEL [account number]");
-    	toConsole("BACK to previous page");
+    	toConsole("7. BACK to previous page");
     	toConsole("Choose action: ");		
 	}
 	
@@ -46,24 +46,18 @@ public class AdminPage implements Viewable {
 		switch (key) {
 		case "CUSTOMERS":
 			List<Customer> customers = eDUO.getCustomers();
-		
-			Menus.customerTableHeader();
-			customers.forEach(c -> Menus.displayCustomerProfile(c));
+			Menus.customersTable(customers);
 			break;
 		case "ACCOUNTS":
 			List<Account> accounts = eDUO.getAccounts();
-			
-			Menus.accountTableHeader();
-			accounts.forEach(a -> Menus.displayAccountContents(a));
+			Menus.accountsTable(accounts);
 			break;
 		case "EMPLOYEES":
 			List<Employee> employees = eDUO.getEmployees();
-			
-			Menus.employeeTableHeader();
-			employees.forEach(e -> Menus.displayEmployeeProfile(e));
+			Menus.employeesTable(employees);
 			break;
 		default:
-			System.out.println("INVALID OPTION! PLEASE CHOOSE EITHER CUSTOMERS OR ACCOUNTS!\n");
+			System.out.println("INVALID OPTION! PLEASE CHOOSE EITHER CUSTOMERS OR ACCOUNTS OR EMPLOYEES!\n");
 			break;
 		}
 	}
@@ -108,10 +102,8 @@ public class AdminPage implements Viewable {
     		// loop until valid command is entered
       		do {
       			// display user's & accounts' info
-      			Menus.customerTableHeader();
-    			Menus.displayCustomerProfile(customer);
-    			Menus.accountTableHeader();
-    			accounts.forEach(a -> Menus.displayAccountContents(a));
+      			Menus.customerTable(customer);
+    			Menus.accountsTable(accounts);
     			
     			customerProfileMenu();
           		key = scan.next();

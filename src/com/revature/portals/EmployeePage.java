@@ -32,15 +32,11 @@ public class EmployeePage implements Viewable {
 		switch (key) {
 		case "CUSTOMERS":
 			List<Customer> customers = eDUO.getCustomers();
-		
-			Menus.customerTableHeader();
-			customers.forEach(c -> Menus.displayCustomerProfile(c));
+			Menus.customersTable(customers);
 			break;
 		case "ACCOUNTS":
 			List<Account> accounts = eDUO.getAccounts();
-			
-			Menus.accountTableHeader();
-			accounts.forEach(a -> Menus.displayAccountContents(a));
+			Menus.accountsTable(accounts);
 			break;
 		default:
 			System.out.println("INVALID OPTION! PLEASE CHOOSE EITHER CUSTOMERS OR ACCOUNTS!\n");
@@ -53,7 +49,7 @@ public class EmployeePage implements Viewable {
 		toConsole("OPTIONS: ");
 		toConsole("1. APPROVE [account number]");
 		toConsole("2. DENY [account number]");
-		toConsole("BACK to previous page");
+		toConsole("3. BACK to previous page");
 		toConsole("Choose action: ");
 	}
 	
@@ -75,10 +71,8 @@ public class EmployeePage implements Viewable {
     		// loop until valid command is entered
       		do {
       			// display user's & accounts' info
-      			Menus.customerTableHeader();
-    			Menus.displayCustomerProfile(customer);
-    			Menus.accountTableHeader();
-    			accounts.forEach(a -> Menus.displayAccountContents(a));
+      			Menus.customerTable(customer);
+    			Menus.accountsTable(accounts);
     			
     			customerProfileMenu();
           		key = scan.next();

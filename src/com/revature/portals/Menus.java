@@ -24,12 +24,6 @@ public class Menus {
           toConsole("=====================================");
     }
     
-	public static void tableHeader(String tableName) {
-  	  toConsole("\n");
-        toConsole(tableName);
-        toConsole("-------------------------------------------------------");
-	}
-    
 	public static String startMenu(Scanner scan) {
         toConsole("\n\nWelcome to your Personal Banking Application!\n");
         toConsole("1. REGISTER for a user account");
@@ -130,28 +124,44 @@ public class Menus {
     	return user;
     }
 
-	public static void accountTableHeader() {
+	public static void accountsTable(List<Account> accounts) {
 		System.out.format("%15s %15s %15s \n", "", "ACCOUNTS", "");
 		toConsole("-----------------------------------------------------------------");
 		System.out.format("%15s %15s %15s \n", "Name", "Number", "Balance");
 		toConsole("-----------------------------------------------------------------");
+		accounts.forEach(a -> Menus.displayAccountContents(a));
+		toConsole("-----------------------------------------------------------------");
+		
 	}
 	
-	public static void customerTableHeader() {
+	public static void customerTable(Customer customer) {
+		System.out.format("%19s %19s %19s \n", "", "CUSTOMER", "");
+		toConsole("------------------------------------------------------------------");
+		System.out.format("%12s %12s %12s %12s %12s \n", "First Name", "Last Name", "Username", "Phone #", "E-mail");
+		toConsole("------------------------------------------------------------------");
+		Menus.displayCustomerProfile(customer);
+		toConsole("------------------------------------------------------------------");
+	}
+	
+	public static void customersTable(List<Customer> customers) {
 		System.out.format("%19s %19s %19s \n", "", "CUSTOMERS", "");
 		toConsole("------------------------------------------------------------------");
 		System.out.format("%12s %12s %12s %12s %12s \n", "First Name", "Last Name", "Username", "Phone #", "E-mail");
 		toConsole("------------------------------------------------------------------");
+		customers.forEach(c -> Menus.displayCustomerProfile(c));
+		toConsole("------------------------------------------------------------------");
 	}
 
-	public static void employeeTableHeader() {
+	public static void employeesTable(List<Employee> employees) {
 		System.out.format("%12s %12s %12s \n", "", "EMPLOYEES", "");
 		toConsole("-------------------------------------------------------");
 		System.out.format("%12s %12s %12s \n", "First Name", "Last Name", "Username");
 		toConsole("-------------------------------------------------------");
+		employees.forEach(e -> Menus.displayEmployeeProfile(e));
+		toConsole("-------------------------------------------------------");
 	}
 
-	public static void displayAccountContents(Account a) {
+	private static void displayAccountContents(Account a) {
     	if (a.isApproved()) {
     		System.out.format("%15s %15d %15.2f \n\n", a.getName(), a.getNumber(), a.getBalance());
     	} else {
@@ -159,11 +169,11 @@ public class Menus {
     	}
     }
 	
-	public static void displayCustomerProfile(Customer c) {
+	private static void displayCustomerProfile(Customer c) {
     	System.out.format("%12s %12s %12s %10d %12s \n\n", c.getFirstName(), c.getLastName(), c.getUsername(), c.getPhone(), c.getEmail());
     }
 	
-	public static void displayEmployeeProfile(Employee e) {
+	private static void displayEmployeeProfile(Employee e) {
     	if (e.isAdmin()) {
     		System.out.format("%12s %12s %12s %15s \n\n", e.getFirstName(), e.getLastName(), e.getUsername(), "[ADMIN]");
     	} else {

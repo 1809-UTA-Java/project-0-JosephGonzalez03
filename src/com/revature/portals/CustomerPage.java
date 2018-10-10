@@ -101,7 +101,7 @@ public class CustomerPage implements Viewable {
 		toConsole("1. DEPOSIT [amount] [dest. account name]");
 		toConsole("2. WITHDRAW [amount] [source account name]");
 		toConsole("3. TRANSFER [amount] [source account name]" + "[dest. account name]");
-		toConsole("BACK to previous page");
+		toConsole("4. BACK to previous page");
 		toConsole("Choose action: ");
 	}
 
@@ -142,8 +142,8 @@ public class CustomerPage implements Viewable {
 			Menus.pageHeader("ACCOUNT LEDGER");
 
 			// display customer's accounts
-			Menus.customerTableHeader();
-			accounts.forEach(a -> Menus.displayAccountContents(a));
+			Menus.accountsTable(accounts);
+			
 			customerProfileMenu();
 			
 			key = scan.next();
