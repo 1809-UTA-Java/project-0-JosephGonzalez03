@@ -10,11 +10,10 @@ import com.revature.util.*;
 
 enum Action {
 	CREATE, ACCESS, DEPOSIT, WITHDRAW, TRANSFER, 
-	SHOW, GET, APPROVE, DENY, CANCEL, BACK, NOTHING;
+	SHOW, GET, APPROVE, DENY, CANCEL, BACK, LOGOUT, NOTHING;
 }
 
 public class Menus {
-	
 	public static void toConsole(String message) {
         System.out.println(message);
     }
@@ -26,13 +25,13 @@ public class Menus {
     }
     
 	public static void tableHeader(String tableName) {
-  	  toConsole("\n\n\n");
+  	  toConsole("\n");
         toConsole(tableName);
-        toConsole("---------------------------------------");
+        toConsole("-------------------------------------------------------");
 	}
     
 	public static String startMenu(Scanner scan) {
-        toConsole("Welcome to your Personal Banking Application!\n");
+        toConsole("\n\nWelcome to your Personal Banking Application!\n");
         toConsole("1. REGISTER for a user account");
         toConsole("2. LOGIN fromTo an existing one");
         toConsole("3. EXIT banking app");
@@ -41,8 +40,8 @@ public class Menus {
         return scan.nextLine();
     }
 
-	public static Customer registerMenu(Scanner scan) {
-        String username = "", pwrd = "", first = "", last = "", email = "";
+	public static void registerMenu(Scanner scan) {
+		String username = "", pwrd = "", first = "", last = "", email = "";
         int phone;
         String confirmedPassword = new String();
 
@@ -72,7 +71,7 @@ public class Menus {
     	email = scan.nextLine();
     	
     	toConsole("\n\n\n\n\n\n");
-        return new Customer(username, pwrd, first, last, phone, email);
+    	DAOUtil.getCustomerDAO().addCustomer(new Customer(username, pwrd, first, last, phone, email));
     }
 
 	public static String loginMenu(Scanner scan) {
@@ -80,6 +79,7 @@ public class Menus {
     	List<String> responses = new ArrayList<>();
 
     	boolean isVerified = false;
+    	int failedCounter = 0;
 
     	do {
     		pageHeader("LOGIN PAGE");
@@ -95,7 +95,8 @@ public class Menus {
     			isVerified = true;
     		}
     				
-    	} while(!isVerified);
+    		failedCounter++;
+    	} while(!isVerified && failedCounter < 3);
 
         return user.getUsername();
     }
@@ -107,6 +108,7 @@ public class Menus {
     	User user = null;
     	
     	boolean foundUser = false;
+    	boolean wrongPwrd = false;
     	
     	for (User u : users) {
     		// found user name in users set
@@ -116,16 +118,38 @@ public class Menus {
 			    	user = u;
 				    foundUser = true;
 			    } else {
+			    	wrongPwrd = true;
 			    	System.out.println("INCORRECT PASSWORD!");
 			    }
 		    }
 	    }
     	
-    	if(!foundUser) {
+    	if(!foundUser && !wrongPwrd) {
     		System.out.println("USERNAME NOT FOUND!");
 		}
     	return user;
     }
+
+	public static void accountTableHeader() {
+		System.out.format("%15s %15s %15s \n", "", "ACCOUNTS", "");
+		toConsole("-----------------------------------------------------------------");
+		System.out.format("%15s %15s %15s \n", "Name", "Number", "Balance");
+		toConsole("-----------------------------------------------------------------");
+	}
+	
+	public static void customerTableHeader() {
+		System.out.format("%19s %19s %19s \n", "", "CUSTOMERS", "");
+		toConsole("------------------------------------------------------------------");
+		System.out.format("%12s %12s %12s %12s %12s \n", "First Name", "Last Name", "Username", "Phone #", "E-mail");
+		toConsole("------------------------------------------------------------------");
+	}
+
+	public static void employeeTableHeader() {
+		System.out.format("%12s %12s %12s \n", "", "EMPLOYEES", "");
+		toConsole("-------------------------------------------------------");
+		System.out.format("%12s %12s %12s \n", "First Name", "Last Name", "Username");
+		toConsole("-------------------------------------------------------");
+	}
 
 	public static void displayAccountContents(Account a) {
     	if (a.isApproved()) {
@@ -134,16 +158,16 @@ public class Menus {
     		System.out.format("%15s %15d %15.2f %15s \n\n", a.getName(), a.getNumber(), a.getBalance(), "[UNAPPROVED]");
     	}
     }
-    
+	
 	public static void displayCustomerProfile(Customer c) {
-    	System.out.format("%20s %20s %20s %10d %20s \n\n", c.getFirstName(), c.getLastName(), c.getUsername(), c.getPhone(), c.getEmail());
+    	System.out.format("%12s %12s %12s %10d %12s \n\n", c.getFirstName(), c.getLastName(), c.getUsername(), c.getPhone(), c.getEmail());
     }
-    
+	
 	public static void displayEmployeeProfile(Employee e) {
     	if (e.isAdmin()) {
-    		System.out.format("%20s %20d %20s %15s \n\n", e.getFirstName(), e.getLastName(), e.getUsername(), "[ADMIN]");
+    		System.out.format("%12s %12s %12s %15s \n\n", e.getFirstName(), e.getLastName(), e.getUsername(), "[ADMIN]");
     	} else {
-    		System.out.format("%20s %20s %20s \n\n", e.getFirstName(), e.getLastName(), e.getUsername());
+    		System.out.format("%12s %12s %12s \n\n", e.getFirstName(), e.getLastName(), e.getUsername());
     	}
     }
     

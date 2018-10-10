@@ -2,11 +2,7 @@ package com.revature.util;
 
 import com.revature.duo.*;
 
-public class DUOUtil {
-	public static AdminDUO getAdminDUO() {
-	    return new AdminDUO();
-	}
-	
+public class DUOUtil {	
 	public static EmployeeDUO getEmployeeDUO() {
 	    return new EmployeeDUO();
 	}

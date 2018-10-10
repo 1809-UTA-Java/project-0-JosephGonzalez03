@@ -27,13 +27,12 @@ public class AccountDAOImpl implements AccountDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				Account a = new Account();
+				int accNum = rs.getInt("accNumber");
+				String name = rs.getString("accName");
+				double balance = rs.getDouble("balance");
+				boolean isApp = Boolean.parseBoolean(rs.getString("isApproved"));
 				
-				a.setNumber(rs.getInt("accNumber"));
-				a.setName(rs.getString("accName"));
-				a.setBalance(rs.getDouble("balance"));
-				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
-				
+				Account a = new Account(accNum, name, balance, isApp);
 				accounts.add(a);
 			}
 			
@@ -55,18 +54,17 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS WHERE isApprove = false ORDER BY accNumber ASC";
+			String sql = "SELECT * FROM ACCOUNTS WHERE isApproved = 'false' ORDER BY accNumber ASC";
 			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				Account a = new Account();
+				int accNum = rs.getInt("accNumber");
+				String name = rs.getString("accName");
+				double balance = rs.getDouble("balance");
+				boolean isApp = Boolean.parseBoolean(rs.getString("isApproved"));
 				
-				a.setNumber(rs.getInt("accNumber"));
-				a.setName(rs.getString("accName"));
-				a.setBalance(rs.getDouble("balance"));
-				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
-				
+				Account a = new Account(accNum, name, balance, isApp);
 				accounts.add(a);
 			}
 			
@@ -89,19 +87,18 @@ public class AccountDAOImpl implements AccountDAO {
 		
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "SELECT * FROM ACCOUNTS AS a INNER JOIN CUSTOMER_ACCOUNTS AS ca ON a.accNumber = ca.accNumber WHERE ca.username = ?";
+			String sql = "SELECT * FROM ACCOUNTS a INNER JOIN CUSTOMERS_ACCOUNTS ca ON a.accNumber = ca.accNumber WHERE ca.username = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				Account a = new Account();
+				int accNum = rs.getInt("accNumber");
+				String name = rs.getString("accName");
+				double balance = rs.getDouble("balance");
+				boolean isApp = Boolean.parseBoolean(rs.getString("isApproved"));
 				
-				a.setNumber(rs.getInt("accNumber"));
-				a.setName(rs.getString("accName"));
-				a.setBalance(rs.getDouble("balance"));
-				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
-				
+				Account a = new Account(accNum, name, balance, isApp);
 				accounts.add(a);
 			}
 			
@@ -133,9 +130,8 @@ public class AccountDAOImpl implements AccountDAO {
 				a.setNumber(rs.getInt("accNumber"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
-				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
+				a.setApproved(Boolean.parseBoolean(rs.getString("isApproved")));
 			}
-			
 			
 			rs.close();
 			ps.close();
@@ -165,7 +161,7 @@ public class AccountDAOImpl implements AccountDAO {
 				a.setNumber(rs.getInt("accNumber"));
 				a.setName(rs.getString("accName"));
 				a.setBalance(rs.getDouble("balance"));
-				a.setApproved(Boolean.parseBoolean(rs.getString("isApprove")));
+				a.setApproved(Boolean.parseBoolean(rs.getString("isApproved")));
 			}
 			
 			rs.close();
@@ -185,13 +181,40 @@ public class AccountDAOImpl implements AccountDAO {
 	public boolean addAccount(Account account) {
 		try {
 			conn = DAOUtil.getConnection();
-			String sql = "INSERT INTO ACCOUNTS VALUES (?,?,?,?,?)";
+			String sql = "INSERT INTO ACCOUNTS VALUES (?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, account.getNumber());
 			ps.setString(2, account.getName());
-			ps.setString(3, account.getName());
-			ps.setDouble(4, account.getBalance());
-			ps.setString(5, Boolean.toString(account.isApproved()));
+			ps.setDouble(3, account.getBalance());
+			ps.setString(4, Boolean.toString(account.isApproved()));
+	
+			if(ps.executeUpdate() != 0) {
+				ps.close();
+				return true;
+			} else {
+				ps.close();
+				return false;
+			} 
+			
+		} catch (SQLException e) {
+			e.getMessage();
+			return false;
+		} catch (IOException e) {
+			e.getMessage();
+			return false;
+		}
+	}
+
+	/******************************************************************/
+	
+	@Override
+	public boolean addCustomerAccount(String username, Account account) {
+		try {
+			conn = DAOUtil.getConnection();
+			String sql = "INSERT INTO CUSTOMERS_ACCOUNTS VALUES (?,?)";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, username);
+			ps.setInt(2, account.getNumber());
 	
 			if(ps.executeUpdate() != 0) {
 				ps.close();
@@ -218,7 +241,34 @@ public class AccountDAOImpl implements AccountDAO {
 			conn = DAOUtil.getConnection();
 			String sql = "DELETE FROM ACCOUNTS WHERE accNumber = ?";
 			ps = conn.prepareStatement(sql);
-			ps.setLong(1, account.getNumber());
+			ps.setInt(1, account.getNumber());
+			
+			if(ps.executeUpdate() != 0) {
+				ps.close();
+				return true;
+			} else {
+				ps.close();
+				return false;
+			} 
+			
+		} catch (SQLException e) {
+			e.getMessage();
+			return false;
+		} catch (IOException e) {
+			e.getMessage();
+			return false;
+		}
+	}
+	
+	/******************************************************************/
+	
+	@Override
+	public boolean removeCustomerAccount(Account account) {
+		try {
+			conn = DAOUtil.getConnection();
+			String sql = "DELETE FROM CUSTOMERS_ACCOUNTS WHERE accNumber = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, account.getNumber());
 			
 			if(ps.executeUpdate() != 0) {
 				ps.close();
@@ -245,8 +295,33 @@ public class AccountDAOImpl implements AccountDAO {
 			conn = DAOUtil.getConnection();
 			String sql = "UPDATE ACCOUNTS SET balance = ? WHERE accNumber = ?";
 			ps = conn.prepareStatement(sql);
-			ps.setLong(1, accountNumber);
-			ps.setDouble(2, balance);
+			ps.setDouble(1, balance);
+			ps.setInt(2, accountNumber);
+			
+			if(ps.executeUpdate() != 0) {
+				ps.close();
+				return true;
+			} else {
+				ps.close();
+				return false;
+			} 
+			
+		} catch (SQLException e) {
+			e.getMessage();
+			return false;
+		} catch (IOException e) {
+			e.getMessage();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean approveAccount(int accountNumber) {
+		try {
+			conn = DAOUtil.getConnection();
+			String sql = "UPDATE ACCOUNTS SET isApproved = 'true' WHERE accNumber = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, accountNumber);
 			
 			if(ps.executeUpdate() != 0) {
 				ps.close();

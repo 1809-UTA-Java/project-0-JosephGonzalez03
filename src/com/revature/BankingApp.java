@@ -3,12 +3,10 @@ package com.revature;
 import java.util.Scanner;
 
 import com.revature.dao.*;
-import com.revature.duo.*;
 import com.revature.models.*;
 import com.revature.portals.Menus;
 import com.revature.portals.Portals;
 import com.revature.util.*;
-import com.revature.util.DUOUtil;
 
 enum Action {
 	REGISTER, LOGIN, LOGOUT, EXIT, NOTHING;
@@ -26,13 +24,13 @@ public class BankingApp {
 
     	// dao objects
     	CustomerDAO cDAO = DAOUtil.getCustomerDAO();
-
+    	EmployeeDAO eDAO = DAOUtil.getEmployeeDAO();
     	// users
     	User user = null;
     	Employee employee = null;
     	Customer customer = null;
     	
-    	BankUser bankUser = null;
+    	BankUser bankUser = BankUser.CUSTOMER;
     	
     	boolean terminate = false;
     	boolean isLoggedIn = false;	
@@ -45,7 +43,7 @@ public class BankingApp {
         		// welcome pages
     			switch (toAction(key)) {
     			case REGISTER:
-    				 user = Menus.registerMenu(s);
+    				 Menus.registerMenu(s);
     				 break;
     			case LOGIN:
     				username = Menus.loginMenu(s);
@@ -60,7 +58,7 @@ public class BankingApp {
 				    bankUser = BankUser.CUSTOMER;
 				} else {
 				    customer = null;
-				    employee = (Employee) user;
+				    employee = eDAO.getEmployeeByUsername(username);
 				    bankUser = employee.isAdmin() ? BankUser.ADMIN : BankUser.EMPLOYEE;
 				}
 				
@@ -74,22 +72,22 @@ public class BankingApp {
     		} else {
     		    switch(bankUser) {
     		    case ADMIN: 
-    		    	Portals.adminPortal(employee, s);
+    		    	isLoggedIn = Portals.adminPortal(employee, s);
     		        break;
     		     case EMPLOYEE: 
-    		    	 Portals.employeePortal(employee, s);
+    		    	 isLoggedIn = Portals.employeePortal(employee, s);
     		        break;
-			case CUSTOMER: 
-    		    	Portals.customerPortal(customer, s);
+    		     case CUSTOMER: 
+					isLoggedIn = Portals.customerPortal(customer, s);
     		        break;
-			default:
-				break;
+    		     default:
+    		    	 break;
     		    }
     		}
     		
-    		
     		/////
     	}
+    	s.close();
 	}
     
     static Action toAction(String string) {

@@ -33,13 +33,13 @@ public class EmployeePage implements Viewable {
 		case "CUSTOMERS":
 			List<Customer> customers = eDUO.getCustomers();
 		
-			Menus.tableHeader("CUSTOEMRS TABLE");
+			Menus.customerTableHeader();
 			customers.forEach(c -> Menus.displayCustomerProfile(c));
 			break;
 		case "ACCOUNTS":
 			List<Account> accounts = eDUO.getAccounts();
 			
-			Menus.tableHeader("ACCOUNTS TABLE");
+			Menus.accountTableHeader();
 			accounts.forEach(a -> Menus.displayAccountContents(a));
 			break;
 		default:
@@ -53,6 +53,7 @@ public class EmployeePage implements Viewable {
 		toConsole("OPTIONS: ");
 		toConsole("1. APPROVE [account number]");
 		toConsole("2. DENY [account number]");
+		toConsole("BACK to previous page");
 		toConsole("Choose action: ");
 	}
 	
@@ -67,27 +68,27 @@ public class EmployeePage implements Viewable {
 			System.out.println("INVALID USERNAME!\n");
 			return false;
 		} else {
-			Menus.tableHeader("CUSOMTER INFORMATION");
-			Menus.displayCustomerProfile(customer);
-			Menus.tableHeader("ACCOUNTS INFORMATION");
-			accounts.forEach(a -> Menus.displayAccountContents(a));
-			
-			customerProfileMenu();
-      		key = scan.next();
-
       		// save user inputs for validation
       		Account currA =  null;
       		boolean validInput = false;
       		
     		// loop until valid command is entered
       		do {
-      			
+      			// display user's & accounts' info
+      			Menus.customerTableHeader();
+    			Menus.displayCustomerProfile(customer);
+    			Menus.accountTableHeader();
+    			accounts.forEach(a -> Menus.displayAccountContents(a));
+    			
+    			customerProfileMenu();
+          		key = scan.next();
+          		
       			// catch when user does not input proper account number
       			try {
       				switch (Menus.toAction(key)) {
       				case APPROVE:
       				case DENY:
-	      				long accountNumber = scan.nextLong();
+	      				int accountNumber = scan.nextInt();
 	      				currA = eDUO.getAccount(accountNumber);
 	      				
 	      				if (currA == null) {

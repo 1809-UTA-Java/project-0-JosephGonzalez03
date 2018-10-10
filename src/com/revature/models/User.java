@@ -46,12 +46,8 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public String getUserID() {
-		return userID;
-	}
-	
 	@Override
      public boolean equals(Object obj) {
-        return (this.username.equals(((User) obj).username);
+        return (this.username.equals(((User) obj).getUsername()));
 	}
 }

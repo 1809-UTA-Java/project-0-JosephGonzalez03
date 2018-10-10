@@ -2,7 +2,6 @@ package com.revature.models;
 
 
 public class Account {
-	private static int counter = 100000;
 	private int number = 0;
     private String name = new String();
     private double balance = 0.00;
@@ -20,7 +19,7 @@ public class Account {
     // used when initially creating account
 	public Account(String name) {
 		super();
-		this.number = ++counter;
+		this.number = (int) System.currentTimeMillis();
 		this.name = name;
 		this.balance = 0.00;
 		this.isApproved = false;

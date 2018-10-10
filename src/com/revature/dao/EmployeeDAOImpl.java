@@ -13,30 +13,30 @@ import com.revature.models.User;
 import com.revature.util.DAOUtil;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
-	
+
 	Connection conn = null;
 	PreparedStatement ps = null;
-	
-    public List<User> getAllUsers() {
+
+	public List<User> getAllUsers() {
 		User u = null;
 		List<User> users = new ArrayList<>();
-		
+
 		try {
 			conn = DAOUtil.getConnection();
 			String sql = "SELECT username, pwrd, firstName, lastName FROM EMPLOYEES UNION SELECT username, pwrd, firstName, lastName FROM CUSTOMERS";
 			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				String username = rs.getString("username");
 				String pwrd = rs.getString("pwrd");
 				String first = rs.getString("firstName");
 				String last = rs.getString("lastName");
-				
+
 				u = new User(username, pwrd, first, last);
 				users.add(u);
 			}
-			
+
 			rs.close();
 			ps.close();
 		} catch (SQLException e) {
@@ -44,33 +44,33 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		} catch (IOException e) {
 			e.getMessage();
 		}
-		
+
 		return users;
-    }
-    
-    /******************************************************************/
-    
-    public List<Employee> getAllEmployees() {
+	}
+
+	/******************************************************************/
+
+	public List<Employee> getAllEmployees() {
 		Employee e = null;
 		List<Employee> employees = new ArrayList<>();
-		
+
 		try {
 			conn = DAOUtil.getConnection();
 			String sql = "SELECT * FROM EMPLOYEES ORDER BY username ASC";
 			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				String username = rs.getString("username");
 				String pwrd = rs.getString("pwrd");
 				String first = rs.getString("firstName");
 				String last = rs.getString("lastName");
 				boolean isAdmin = Boolean.parseBoolean(rs.getString("isAdmin"));
-				
+
 				e = new Employee(username, pwrd, first, last, isAdmin);
 				employees.add(e);
 			}
-			
+
 			rs.close();
 			ps.close();
 		} catch (SQLException ex) {
@@ -78,27 +78,27 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		} catch (IOException ex) {
 			ex.getMessage();
 		}
-		
+
 		return employees;
-    }
-    
-    /******************************************************************/
-    
-    public boolean grantAdminPriviledge(Employee employee) {
-        try {
+	}
+
+	/******************************************************************/
+
+	public boolean grantAdminPriviledge(Employee employee) {
+		try {
 			conn = DAOUtil.getConnection();
-			String sql = "UPDATE EMPLOYEES SET isAdmin = true WHERE username = ?";
+			String sql = "UPDATE EMPLOYEES SET isAdmin = 'true' WHERE username = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, employee.getUsername());
-			
-			if(ps.executeUpdate() != 0) {
+
+			if (ps.executeUpdate() != 0) {
 				ps.close();
 				return true;
 			} else {
 				ps.close();
 				return false;
-			} 
-			
+			}
+
 		} catch (SQLException e) {
 			e.getMessage();
 			return false;
@@ -106,25 +106,25 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			e.getMessage();
 			return false;
 		}
-    }
-    
-    /******************************************************************/
-    
-    public boolean revokeAdminPriviledge(Employee employee) {
-         try {
+	}
+
+	/******************************************************************/
+
+	public boolean revokeAdminPriviledge(Employee employee) {
+		try {
 			conn = DAOUtil.getConnection();
-			String sql = "UPDATE EMPLOYEES SET isAdmin = false WHERE username = ?";
+			String sql = "UPDATE EMPLOYEES SET isAdmin = 'false' WHERE username = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, employee.getUsername());
-			
-			if(ps.executeUpdate() != 0) {
+
+			if (ps.executeUpdate() != 0) {
 				ps.close();
 				return true;
 			} else {
 				ps.close();
 				return false;
-			} 
-			
+			}
+
 		} catch (SQLException e) {
 			e.getMessage();
 			return false;
@@ -132,5 +132,36 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			e.getMessage();
 			return false;
 		}
-    }
+	}
+
+	@Override
+	public Employee getEmployeeByUsername(String username) {
+		Employee e = null;
+
+		try {
+			conn = DAOUtil.getConnection();
+			String sql = "SELECT * FROM EMPLOYEES WHERE username = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				String usrn = rs.getString("username");
+				String pwrd = rs.getString("pwrd");
+				String first = rs.getString("firstName");
+				String last = rs.getString("lastName");
+				boolean isAdmin = Boolean.parseBoolean(rs.getString("isAdmin"));
+
+				e = new Employee(usrn, pwrd, first, last, isAdmin);
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException ex) {
+			ex.getMessage();
+		} catch (IOException ex) {
+			ex.getMessage();
+		} 
+		return e;
+	}
 }

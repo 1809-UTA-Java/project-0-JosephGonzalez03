@@ -17,31 +17,19 @@ public class EmployeeDUO implements Requestable {
     
     public boolean cancelAccount(Account account) {
 		AccountDAO aDAO = DAOUtil.getAccountDAO();
-		return aDAO.removeAccount(account);
-	}
+		aDAO.removeAccount(account);
+		return aDAO.removeCustomerAccount(account);
+    }
     
     @Override
 	public boolean approveAccount(Account account) {
 		AccountDAO aDAO = DAOUtil.getAccountDAO();
-		
-		if (aDAO.removeAccount(account)) {
-		     account.setApproved(true);
-		     
-		     if (aDAO.addAccount(account)) {
-		         return true;
-		     }
-		}
-		return false;
+		return aDAO.approveAccount(account.getNumber());
 	}
 
 	@Override
 	public boolean denyAccount(Account account) {
-		AccountDAO aDAO = DAOUtil.getAccountDAO();
-		
-		if (aDAO.removeAccount(account)) {
-		    return true;
-		}
-		return false;
+		return cancelAccount(account);
 	}
 	
 	public List<Customer> getCustomers() {
@@ -64,7 +52,7 @@ public class EmployeeDUO implements Requestable {
 		return aDAO.getAccountsByUsername(customer_username);
 	}
 	
-	public Account getAccount(Long account_number) {
+	public Account getAccount(int account_number) {
 		AccountDAO aDAO = DAOUtil.getAccountDAO();
 		return aDAO.getAccountByNumber(account_number);
 	}

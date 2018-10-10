@@ -12,6 +12,9 @@ public interface AccountDAO {
 	public Account getAccountByName(String accountName);
 	
 	public boolean addAccount(Account account);
+	public boolean addCustomerAccount(String username, Account account);
 	public boolean removeAccount(Account account);
+	public boolean removeCustomerAccount(Account account);
 	public boolean updateBalance(int accountNumber, double balance);
+	public boolean approveAccount(int accountNumber);
 }

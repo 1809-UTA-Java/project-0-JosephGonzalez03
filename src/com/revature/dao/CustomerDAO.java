@@ -8,8 +8,6 @@ import com.revature.models.Customer;
 public interface CustomerDAO {
 	public List<Customer> getAllCustomers();
 	public List<Customer> getCustomersByAccountNumber(Account account);
-	public List<Customer> getCustomersByFirstName(Customer customer);
-	public List<Customer> getCustomersByLastName(Customer customer);
 	public Customer getCustomerByUsername(String username);
 	
 	public boolean addCustomer(Customer customer);

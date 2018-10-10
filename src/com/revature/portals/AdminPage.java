@@ -17,7 +17,7 @@ public class AdminPage implements Viewable {
     	Menus.pageHeader("USER & ACCOUNT MANAGEMENT PAGE");
         toConsole("What would you like to do?");
         toConsole("1. SHOW [customers / accounts / employees]");
-        toConsole("2. GET [username]");
+        toConsole("2. GET [customer username]");
         toConsole("3. LOGOUT");
         toConsole("Choose action: ");
         
@@ -47,19 +47,19 @@ public class AdminPage implements Viewable {
 		case "CUSTOMERS":
 			List<Customer> customers = eDUO.getCustomers();
 		
-			Menus.tableHeader("CUSTOEMRS TABLE");
+			Menus.customerTableHeader();
 			customers.forEach(c -> Menus.displayCustomerProfile(c));
 			break;
 		case "ACCOUNTS":
 			List<Account> accounts = eDUO.getAccounts();
 			
-			Menus.tableHeader("ACCOUNTS TABLE");
+			Menus.accountTableHeader();
 			accounts.forEach(a -> Menus.displayAccountContents(a));
 			break;
 		case "EMPLOYEES":
 			List<Employee> employees = eDUO.getEmployees();
 			
-			Menus.tableHeader("EMPLOYYES TABLE");
+			Menus.employeeTableHeader();
 			employees.forEach(e -> Menus.displayEmployeeProfile(e));
 			break;
 		default:
@@ -96,24 +96,26 @@ public class AdminPage implements Viewable {
 			System.out.println("INVALID USERNAME!\n");
 			return false;
 		} else {
-			Menus.tableHeader("CUSOMTER INFORMATION");
-			Menus.displayCustomerProfile(customer);
-			Menus.tableHeader("ACCOUNTS INFORMATION");
-			accounts.forEach(a -> Menus.displayAccountContents(a));
-			
-			customerProfileMenu();
-      		key = scan.next();
 
       		// save user inputs for validation
       		double amount = 0;
       		String name1 = "";
       		String name2 = "";
       		Account currA = null, destA = null;
-      		long accountNumber;
+      		int accountNumber;
       		boolean validInput = false;
       		
     		// loop until valid command is entered
       		do {
+      			// display user's & accounts' info
+      			Menus.customerTableHeader();
+    			Menus.displayCustomerProfile(customer);
+    			Menus.accountTableHeader();
+    			accounts.forEach(a -> Menus.displayAccountContents(a));
+    			
+    			customerProfileMenu();
+          		key = scan.next();
+      			
       			// catch when user does not input proper account number
       			// break down user input to variables
       			try {
@@ -138,7 +140,7 @@ public class AdminPage implements Viewable {
     					break;
       				case APPROVE:
       				case DENY:
-	      				accountNumber = scan.nextLong();
+	      				accountNumber = scan.nextInt();
 	      				currA = eDUO.getAccount(accountNumber);
 	      				
 	      				if (currA == null || currA.isApproved()) {
@@ -149,7 +151,7 @@ public class AdminPage implements Viewable {
 	      	  			}
 	      				break;
       				case CANCEL: 
-      					accountNumber = scan.nextLong();
+      					accountNumber = scan.nextInt();
 	      				currA = eDUO.getAccount(accountNumber);
 	      				
 	      				if (currA == null) {
@@ -188,7 +190,7 @@ public class AdminPage implements Viewable {
 					eDUO.denyAccount(currA);
 					break;
 				case CANCEL:
-					
+					eDUO.cancelAccount(currA);
 				default:
 					break;
 				}
